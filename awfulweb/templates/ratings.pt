@@ -1,0 +1,104 @@
+<div metal:use-macro="layout">
+    <div metal:fill-slot="content">
+
+      <script src="/static/jquery-2.1.3.min.js"></script>
+      <script src="/static/jquery.barrating.min.js"></script>
+
+      <div>
+         <h2>Places that might be AWFUL.</h2>
+      </div>
+
+      <div tal:condition="not unrated">
+         No such thing, everything is AWFUL.
+      </div>
+
+      <div tal:repeat="item unrated">
+        <script type="text/javascript">
+           $(function () {
+                  $('#${item.place_id}').barrating('show', {
+                      showSelectedRating:true,
+                      initialRating:5,
+                      onSelect:function(value, text) {
+                          var dataString = 'place_id='+ ${item.place_id} + '&rating=' + value + '&rating.submitted=true';
+                          $.ajax({
+                              url : "/ratings",
+                              type: "POST",
+                              data: dataString,
+                              success: function () {
+                                  $('#span_${item.place_id}').fadeIn(500).show();
+                              },
+                              error: function (jXHR, textStatus, errorThrown) {
+                                  alert(errorThrown);
+                              }
+                          });
+                      }
+                  });
+           });
+        </script>
+
+        <div class="rating">
+            <label for="${item.place_id}">${item.name}</label>
+            <select id="${item.place_id}" name="rating">
+                <option value="1">VILE.</option>
+                <option value="2">REPUGNANT.</option>
+                <option value="3">NAUSEATING.</option>
+                <option value="4">REVOLTING.</option>
+                <option value="5" selected="selected">AWFUL.</option>
+                <option value="6">POOR.</option>
+                <option value="7">INADEQUATE.</option>
+                <option value="8">UNPLEASANT.</option>
+                <option value="9">INFERIOR.</option>
+                <option value="10">TOLERABLE.</option>
+            </select>
+            <span class="success" id="span_${item.place_id}" style="display:none">We know, that place is AWFUL.</span>
+        </div>
+      </div>
+
+      <div>
+         <h2>Places you know are AWFUL.</h2>
+      </div>
+      <div tal:repeat="item rated">
+        <script type="text/javascript">
+           $(function () {
+                  $('#${item.place.place_id}').barrating('show', {
+                      showSelectedRating:true,
+                      initialRating:${item.rating},
+                      onSelect:function(value, text) {
+                          var dataString = 'place_id='+ ${item.place.place_id} + '&rating=' + value + '&rating.submitted=true';
+                          $.ajax({
+                              url : "/ratings",
+                              type: "POST",
+                              data: dataString,
+                              success: function () {
+                                  $('#span_${item.place_id}').fadeIn(500).show();
+                              },
+                              error: function (jXHR, textStatus, errorThrown) {
+                                  alert(errorThrown);
+                              }
+                          });
+                      }
+                  });
+           });
+        </script>
+
+        <div class="rating">
+            <label for="${item.place.place_id}">${item.place.name}</label>
+            <select id="${item.place.place_id}" name="rating">
+                <option value="1">VILE.</option>
+                <option value="2">REPUGNANT.</option>
+                <option value="3">NAUSEATING.</option>
+                <option value="4">REVOLTING.</option>
+                <option value="5" selected="selected">AWFUL.</option>
+                <option value="6">POOR.</option>
+                <option value="7">INADEQUATE.</option>
+                <option value="8">UNPLEASANT.</option>
+                <option value="9">INFERIOR.</option>
+                <option value="10">TOLERABLE.</option>
+            </select>
+            <span class="success" id="span_${item.place_id}" style="display:none">We know, that place is AWFUL.</span>
+        </div>
+      </div>
+
+
+  </div>
+</div>

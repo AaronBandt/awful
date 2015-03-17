@@ -1,0 +1,38 @@
+<div metal:use-macro="layout">
+    <div metal:fill-slot="content">
+
+    <h1>Factions</h1>
+
+    <div tal:repeat="item factions" class="faction_list" >
+      <ul>
+        <li>
+          <h2 tal:content="item.group_name"/>
+          <span class="faction_join" tal:condition="item.group_name not in au['groups']">
+            <form name="join_faction${item.group_id}" id="join_faction${item.group_id}" method="POST" action="/factions">
+            <input type="hidden" name="faction.join"/>
+            <input type="hidden" name="group_id" tal:attributes="value item.group_id"/>
+            <input class="button" type="submit" name="submit${item.group_id}" value="Join"/>
+            </form>
+          </span>
+          <span class="faction_leave" tal:condition="item.group_name in au['groups']">
+            <form name="leave_faction${item.group_id}" id="leave_faction${item.group_id}" method="POST" action="/factions">
+            <input type="hidden" name="faction.leave"/>
+            <input type="hidden" name="group_id" tal:attributes="value item.group_id"/>
+            <input class="button" type="submit" name="submit${item.group_id}" value="Leave"/>
+            </form>
+          </span>
+        </li>
+        <li tal:repeat="members item.user_group_assignments" tal:content="members.user.first_name + ' ' + members.user.last_name"/> 
+      </ul>
+    </div>
+
+    <div>
+        <form name="faction" id="faction" method="POST" action="/factions">
+        <input type="hidden" name="faction.create"/>
+        <input type="text" name="name" placeholder="Create an AWFUL faction."/>
+        <input class="button" type="submit" name="submit" value="MEH."/>
+        </form>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,17 @@
+<div metal:use-macro="layout">
+    <div metal:fill-slot="content">
+
+        <div tal:repeat="item places" class="row">
+          <span tal:content="item.name"/> 
+        </div>
+
+        <div>
+            <form name="place" id="place" method="POST" action="/places">
+            <input type="hidden" name="place.submitted"/>
+            <input type="text" name="name" placeholder="Add an AWFUL place."/>
+            <input class="button" type="submit" name="submit" value="MEH."/>
+            </form>
+        </div>
+
+  </div>
+</div>

@@ -1,0 +1,105 @@
+<div metal:use-macro="layout">
+    <div metal:fill-slot="content">
+
+      <script src="/static/jquery-2.1.3.min.js"></script>
+
+      <!-- JavaScript Code -->
+      <script>
+          $(document).ready(function() {
+              <!-- Real-time Validation -->
+                  
+                  <!--Email must be an email -->
+                  $('#signup_user_name').on('input', function() {
+                      var input=$(this);
+                      var re = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+                      var is_email=re.test(input.val());
+                      if(is_email){input.removeClass("invalid").addClass("valid");}
+                      else{input.removeClass("valid").addClass("invalid");}
+                  });
+
+                  <!--First Name can't be blank-->
+                  $('#signup_first_name').on('input', function() {
+                      var input=$(this);
+                      var is_name=input.val();
+                      if(is_name){input.removeClass("invalid").addClass("valid");}
+                      else{input.removeClass("valid").addClass("invalid");}
+                  });
+
+                  <!--Last name can't be blank-->
+                  $('#signup_last_name').on('input', function() {
+                      var input=$(this);
+                      var is_name=input.val();
+                      if(is_name){input.removeClass("invalid").addClass("valid");}
+                      else{input.removeClass("valid").addClass("invalid");}
+                  });
+      
+                  <!--Password can't be blank-->
+                  $('#signup_password').on('input', function() {
+                      var input=$(this);
+                      var is_name=input.val();
+                      if(is_name){input.removeClass("invalid").addClass("valid");}
+                      else{input.removeClass("valid").addClass("invalid");}
+                  });
+                  
+              <!-- After Form Submitted Validation-->
+              $("#signup_submit input").click(function(event){
+                  var form_data=$("#signup").serializeArray();
+                  var error_free=true;
+                  for (var input in form_data){
+                      var element=$("#signup_"+form_data[input]['name']);
+                      if (element.selector === '#signup_signup_submitted') continue;
+                      var valid=element.hasClass("valid");
+                      var error_element=$("span", element.parent());
+                      if (!valid){error_element.removeClass("form_error").addClass("form_error_show"); error_free=false;}
+                      else{error_element.removeClass("form_error_show").addClass("form_error");}
+                  }
+                  if (!error_free){
+                      event.preventDefault(); 
+                  }
+              });
+          });
+      </script>
+
+  <div id="login">
+      <p class="login">
+      <img src="/static/logo-large.png">
+      <span id="login_header">AWFUL</span>
+      <p class="login_subtext">(A Wish For Unfettered Lunch)</p>
+      </p>
+  
+      <h2 class="error" tal:condition="error" tal:content="error"/>
+      <h2 tal:condition="not error">Reister to get started</h2>
+
+      <p class="login">
+        <form id="signup" action="/signup" method="POST">
+
+          <div>
+            <input type="email" id="signup_user_name" name="user_name" placeholder="email address"/>
+            <span class="form_error">A valid email address is required</span>               
+          </div>                  
+      
+          <div>
+            <input type="text" id="signup_first_name" name="first_name" placeholder="first name"/>
+            <span class="form_error">Your first name is required</span>               
+          </div>
+
+          <div>
+            <input type="text" id="signup_last_name" name="last_name" placeholder="last name"/>
+            <span class="form_error">Your last name is required</span>               
+          </div>
+
+          <div>
+            <input type="password" id="signup_password" name="password" placeholder="password"/>
+            <span class="form_error">A valid password is required</span>               
+          </div>
+
+          <div id="signup_submit">
+            <input class="button" type="submit" name="signup_submit" value="Sign Up"/>
+          </div>
+          <input type="hidden" id="signup_signup_submitted" name="signup_submitted"/>
+        </form>
+      </p>
+  </div>
+
+  </div>
+</div>

@@ -1,0 +1,72 @@
+<html lang="en-US"
+      xmlns="http://www.w3.org/1999/xhtml">
+  <head profile="http://www.w3.org/2005/10/profile">
+    <title>test</title>
+    <link href="/static/awful.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+
+      <script src="/static/jquery-2.1.3.min.js"></script>
+      <script>
+        $(window).load(function(){
+                var pages = $('#results li'), current=0;
+                var currentPage,nextPage;
+                var handler=function(){
+                    $('#results .button').unbind('click');
+                    currentPage= pages.eq(current);
+                    if($(this).hasClass('prevButton'))
+                    {
+                        if (current <= 0)
+                            current=pages.length-1;
+                        else
+                            current=current-1;
+                        nextPage = pages.eq(current);
+        
+                        nextPage.css("marginLeft",-400);
+                        nextPage.show();
+                        nextPage.animate({ marginLeft: 0 }, 800,function(){
+                            currentPage.hide();
+                        });
+                        currentPage.animate({ marginLeft: 400 }, 800,function(){
+                            $('#results .button').bind('click',handler);
+                        });
+                    }
+                    else
+                    {
+        
+                        if (current >= pages.length-1)
+                            current=0;
+                        else
+                            current=current+1;
+                        nextPage = pages.eq(current);
+        
+                        nextPage.css("marginLeft",400);
+                        nextPage.show();
+                        nextPage.animate({ marginLeft: 0 }, 800,function(){
+                        });
+                        currentPage.animate({ marginLeft: -400 }, 800,function(){
+                            currentPage.hide();
+                            $('#results .button').bind('click',handler);
+                        });
+                    }
+                }
+        
+                $('#results .button').click(handler);
+        
+        });
+      </script>
+
+    <div id="results">
+      <ul>
+        <li tal:repeat="item results" ><h2>${item}</h2></li>
+      </ul>
+      <input class="button prevButton" type="submit" name="previous" value="Wait..."/>
+      <input class="button nextButton" type="submit" name="next" value="Gross..."/>
+    </div>  
+      
+  </body>
+</html>
+
+
+
+

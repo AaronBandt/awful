@@ -1,0 +1,20 @@
+<div metal:use-macro="layout">
+    <div metal:fill-slot="content">
+
+  <div id="login">
+      <p class="login">
+      <img src="/static/logo-large.png">
+      </p>
+      <p id="login_header">GOOD.</p>
+
+      <p class="error" tal:condition="message" tal:content="message"/>
+
+      <p class="login">
+      <input class="button" type="submit" value="Log In Again"  onclick="window.location='/login';"/>
+      </p>
+
+  </div>
+
+  </div>
+</div>
+

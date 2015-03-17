@@ -1,0 +1,30 @@
+<div metal:use-macro="layout">
+    <div metal:fill-slot="content">
+
+  <div id="login">
+      <p class="login">
+      <img src="/static/logo-large.png">
+      <span id="login_header">AWFUL</span>
+      <p class="login_subtext">(A Wish For Unfettered Lunch)</p>
+      </p>
+  
+      <h2 class="error" tal:condition="error" tal:content="error"/>
+
+      <p class="login">
+        <form class="login" action="/login" method="POST">
+          <input type="text" name="login" placeholder="email address"/>
+          <input type="password" name="password" placeholder="password"/>
+          <br/>
+          <br/>
+          <input type="hidden" name="form.submitted"/>
+          <input type="hidden" name="return_url" value="${return_url}"/>
+          <input class="button" type="submit" name="submit" value="Log In"/>
+        </form>
+        <p class="login_subtext">
+          Not AWFUL yet? <a href="/signup">Sign Up</a>
+        </p>
+      </p>
+  </div>
+
+  </div>
+</div>

@@ -1,0 +1,14 @@
+<div metal:use-macro="layout">
+    <div metal:fill-slot="content">
+
+  <div id="login">
+      <p class="login">
+      <img src="/static/logo-large.png">
+      </p>
+      <p id="login_header">NOPE.</p>
+
+  </div>
+
+  </div>
+</div>
+
