@@ -29,8 +29,10 @@ INSERT INTO places (name,updated_by,created,updated) VALUES ('Joe\'s Pizza','aar
 INSERT INTO places (name,updated_by,created,updated) VALUES ('Tender Greens','aaron.bandt@citygridmedia.com',NOW(),NOW());
 INSERT INTO places (name,updated_by,created,updated) VALUES ('Five Guys','aaron.bandt@citygridmedia.com',NOW(),NOW());
 INSERT INTO places (name,updated_by,created,updated) VALUES ('Rounds','aaron.bandt@citygridmedia.com',NOW(),NOW());
-INSERT INTO places (name,updated_by,created,updated) VALUES ('Joe\'s Greek','aaron.bandt@citygridmedia.com',NOW(),NOW());
+INSERT INTO places (name,updated_by,created,updated) VALUES ('Georg\'s Greek','aaron.bandt@citygridmedia.com',NOW(),NOW());
 INSERT INTO places (name,updated_by,created,updated) VALUES ('Chop Stop','aaron.bandt@citygridmedia.com',NOW(),NOW());
+
+
 INSERT INTO places (name,updated_by,created,updated) VALUES ('','aaron.bandt@citygridmedia.com',NOW(),NOW());
 
 

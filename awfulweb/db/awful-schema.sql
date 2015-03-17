@@ -57,7 +57,7 @@ DROP TABLE IF EXISTS `places`;
 CREATE TABLE `places` (
   `place_id`           mediumint(9) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name`               varchar(250) COLLATE utf8_bin NOT NULL,
-  `updated_by`         varchar(30) NOT NULL,
+  `updated_by`         varchar(200) NOT NULL,
   `created`            timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated`            timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -73,7 +73,7 @@ CREATE TABLE `ratings` (
   `rating_id`          mediumint(9) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `place_id`           mediumint(9) UNSIGNED NOT NULL,
   `rating`             mediumint(9) UNSIGNED NOT NULL,
-  `updated_by`         varchar(30) NOT NULL,
+  `updated_by`         varchar(200) NOT NULL,
   `created`            timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated`            timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
