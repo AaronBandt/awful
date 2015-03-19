@@ -3,7 +3,7 @@
 
   <div id="login">
       <p class="login">
-      <img src="/static/logo-large.png">
+      <img src="/static/logo-medium.png">
       </p>
       <p id="login_header">GOOD.</p>
 
