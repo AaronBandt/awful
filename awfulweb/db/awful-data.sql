@@ -35,6 +35,7 @@ INSERT INTO places (name,updated_by,created,updated) VALUES ('Chop Stop','aaron.
 
 INSERT INTO places (name,updated_by,created,updated) VALUES ('','aaron.bandt@citygridmedia.com',NOW(),NOW());
 
+INSERT INTO last_visit (place_id,user_id,date) VALUES (1,1,NOW());
 
 
 INSERT INTO users VALUES (1, 'aaron.bandt@citygridmedia.com', 'Aaron', 'Bandt', '$6$Vf7ZmjQarLus/TqT', '$6$Vf7ZmjQarLus/TqT$l5qsqY4ntpX8nEzbm33n5StF5D.93yV3uoh8ucthwFf8mEJBitnGLr5SWhzD2vpkpnAJnUiLl40d0hH24qPOq1', 'Admin', NOW(),NOW());

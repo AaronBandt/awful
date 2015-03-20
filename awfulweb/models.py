@@ -123,3 +123,13 @@ class Rating(Base):
     updated         = Column(TIMESTAMP, nullable=False)
     place           = relationship("Place", backref=backref('ratings'))
 
+
+class LastVisit(Base):
+    __tablename__ = 'last_visit'
+    last_visit_id   = Column(Integer, primary_key=True, nullable=False)
+    place_id        = Column(Integer, ForeignKey('places.place_id'), nullable=False)
+    user_id         = Column(Integer, ForeignKey('users.user_id'), nullable=False)
+    date            = Column(TIMESTAMP, nullable=False)
+    place           = relationship("Place", backref=backref('last_visit'))
+
+

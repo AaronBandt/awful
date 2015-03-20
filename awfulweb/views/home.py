@@ -3,6 +3,9 @@ from pyramid.response import Response
 from sqlalchemy.sql import func
 from sqlalchemy import desc
 from sqlalchemy.sql import label
+import datetime
+import arrow
+from dateutil import tz
 from awfulweb.views import (
     get_authenticated_user,
     site_layout,
@@ -12,6 +15,8 @@ from awfulweb.models import (
     DBSession,
     User,
     Rating,
+    Place,
+    LastVisit,
     )
 
 @view_config(route_name='home', permission='view', renderer='awfulweb:templates/home.pt')
@@ -37,6 +42,19 @@ def view_home(request):
         total = q.count()
         if total:
             has_reviews = True
+
+        q = DBSession.query(Place)
+        q = q.filter(Rating.updated_by==au['login'])
+        places = q.all()
+
+        for p in places:
+            for v in p.last_visit:
+                print "UTC Date is: ", v.date
+                utc_date = arrow.get(v.date)
+                local_date = utc_date.to('US/Pacific')
+                print "Local date is: ", local_date
+                if local_date < datetime.datetime.now()-datetime.timedelta(seconds=20):
+                    print 'good'
 
     except Exception, e:
         conn_err_msg = e

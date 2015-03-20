@@ -80,4 +80,17 @@ CREATE TABLE `ratings` (
 
 CREATE UNIQUE INDEX idx_ratings_unique on ratings (place_id, updated_by);
 
+###
+### TABLE: last_visit
+###   Do not go somewhere AWFUL twice.
+###
+DROP TABLE IF EXISTS `last_visit`;
+CREATE TABLE `last_visit` (
+  `last_visit_id`      mediumint(9) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `place_id`           mediumint(9) UNSIGNED NOT NULL,
+  `user_id`            mediumint(9) UNSIGNED NOT NULL,
+  `date`               timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+CREATE UNIQUE INDEX idx_last_visit_unique on last_visit (place_id, user_id);
 
