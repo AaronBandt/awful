@@ -10,7 +10,7 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
     font-family: "Coda", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: 300;
+    font-weight: 500;
 }
 
 h1, h2 {
@@ -455,7 +455,7 @@ input.valid, textarea.valid{
 #results_container,
 #results_container_lower,
 #results_container_inner {
-    width: 50%;
+    display: table;
     margin: 0 auto;
 }
 
@@ -540,4 +540,9 @@ input.valid, textarea.valid{
     display:inline;
 }
 
-
+/* Search Results */
+.search_results {
+    width: 500px;
+    height: 300px;
+    display: inline-block;
+}

@@ -56,13 +56,14 @@ CREATE UNIQUE INDEX idx_group_name_unique on groups (group_name);
 DROP TABLE IF EXISTS `places`;
 CREATE TABLE `places` (
   `place_id`           mediumint(9) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `cs_id`              bigint(1) UNSIGNED NOT NULL,
   `name`               varchar(250) COLLATE utf8_bin NOT NULL,
   `updated_by`         varchar(200) NOT NULL,
   `created`            timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated`            timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-CREATE UNIQUE INDEX idx_places_unique on places (name);
+CREATE UNIQUE INDEX idx_places_unique on places (cs_id);
 
 ###
 ### TABLE: ratings

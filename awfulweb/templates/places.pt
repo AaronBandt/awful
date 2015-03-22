@@ -1,17 +1,108 @@
 <div metal:use-macro="layout">
     <div metal:fill-slot="content">
 
+      <script src="https://maps.googleapis.com/maps/api/js"></script>
+      <script>
+        // Ask for lat/lon and if we get it, insert it into the form.
+        window.onload = function ()
+        {
+          navigator.geolocation.getCurrentPosition(foundLocation, noLocation);
+
+          function addHidden(theForm, key, value) {
+              // Create a hidden input element, and append it to the form:
+              var input = document.createElement('input');
+              input.type = 'hidden';
+              input.name = key;
+              input.value = value;
+              theForm.appendChild(input);
+          }
+          
+          var theForm = document.forms['place_search'];
+
+          function foundLocation(position)
+          {
+            var lat = position.coords.latitude;
+            var long = position.coords.longitude;
+            addHidden(theForm, 'home_lat', lat);
+            addHidden(theForm, 'home_lon', long);
+          }
+          function noLocation()
+          {
+            alert('Could not find location');
+          }
+        }
+      </script>
+
+      <div>
+          <form name="place_search" id="place" method="POST" action="/places">
+          <input type="hidden" name="place_search.submitted"/>
+          <input type="text" name="name" placeholder="Search for a new AWFUL place."/>
+          <input class="button" type="submit" name="submit" value="MEH."/>
+          </form>
+      </div>
+
+      <div tal:condition="search">
+        <h2>Search Results (${result_count})</h2>
+        <h3 tal:condition="not result_count">No Results Found</h3>
+        <div class="search_results" tal:repeat="item search_results">
+
+
+          <style>
+            #map-canvas-${item.cs_id} {
+              width: 300px;
+              height: 200px;
+            }
+          </style>
+          <script>
+            function initialize() {
+      
+              var mapCanvas = document.getElementById('map-canvas-${item.cs_id}');
+              var mapOptions = {
+                center: new google.maps.LatLng(${item.lat}, ${item.lon}),
+                zoom: 15,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+              }
+              var map = new google.maps.Map(mapCanvas, mapOptions)
+      
+              var myLatlng = new google.maps.LatLng(${item.lat}, ${item.lon});
+              var marker = new google.maps.Marker({
+                position: myLatlng,
+                map: map,
+                title:"${item.name}"
+              });
+      
+            }
+            google.maps.event.addDomListener(window, 'load', initialize);
+          </script>
+
+          <h2 tal:content="item.name + ' - ' + item.addr_city"/> 
+
+          <form name="place_select" id="place_select" method="POST" action="/places">
+          <input type="hidden" name="place_select.submitted"/>
+          <input type="hidden" name="cs_id" value="${item.cs_id}"/>
+          <span tal:content="item.cs_id"/><br/>
+          <span tal:content="item.addr_street"/><br/>
+          <span tal:content="item.addr_city"/><br/>
+          <span tal:content="item.addr_state + ','"/>
+          <span tal:content="item.addr_zip"/><br/>
+          <span tal:condition="item.phone" tal:content="'(' + item.phone[:3] + ')' + item.phone[3:6] + '-' + item.phone[6:10]"/><br/>
+          <span ><a href="${item.website}">website</a></span><br/>
+          <input class="button" type="submit" name="submit" value="This One"/>
+          </form>
+
+          <div id="map-canvas-${item.cs_id}"></div>
+
+        </div>
+      </div>
+
+      <div tal:condition="not search">
+        <h2>AWFUL Places</h2>
+
         <div tal:repeat="item places" class="row">
           <span tal:content="item.name"/> 
         </div>
+      </div>
 
-        <div>
-            <form name="place" id="place" method="POST" action="/places">
-            <input type="hidden" name="place.submitted"/>
-            <input type="text" name="name" placeholder="Add an AWFUL place."/>
-            <input class="button" type="submit" name="submit" value="MEH."/>
-            </form>
-        </div>
 
   </div>
 </div>

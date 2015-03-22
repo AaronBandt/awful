@@ -61,7 +61,7 @@
 
         <form id="whereto" action="/" method="POST">
         <div class="user_cb row" tal:condition="has_reviews" tal:repeat="user all_users">
-          <input id="user_${user.user_id}" type="checkbox" name="included" value="${user.user_name}">
+          <input id="user_${user.user_id}" type="checkbox" name="awfulite" value="${user.user_name}">
           <label for="user_${user.user_id}">${user.first_name} ${user.last_name}</label>
         </div>
         <div id="whereto_submit">
@@ -91,6 +91,12 @@
         </div>
         <div id="results_container_lower">
         </div>
+      </div>
+
+      <div tal:repeat="item places_response">
+          <span>${item.name}</span>
+          <span>${item.avg}</span>
+          <span>${item.pa}</span>
       </div>
 
 
