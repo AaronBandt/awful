@@ -97,6 +97,7 @@ class Group(Base):
 class Place(Base):
     __tablename__ = 'places'
     place_id         = Column(Integer, primary_key=True, nullable=False)
+    cs_id            = Column(Integer, nullable=False)
     name             = Column(Text, nullable=False)
     updated_by       = Column(Text, nullable=False)
     created          = Column(TIMESTAMP, nullable=False)

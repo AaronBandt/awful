@@ -23,6 +23,7 @@
           {
             var lat = position.coords.latitude;
             var long = position.coords.longitude;
+#            alert('Could not find location');
             addHidden(theForm, 'home_lat', lat);
             addHidden(theForm, 'home_lon', long);
           }
@@ -80,6 +81,7 @@
           <form name="place_select" id="place_select" method="POST" action="/places">
           <input type="hidden" name="place_select.submitted"/>
           <input type="hidden" name="cs_id" value="${item.cs_id}"/>
+          <input type="hidden" name="name" value="${item.name}"/>
           <span tal:content="item.cs_id"/><br/>
           <span tal:content="item.addr_street"/><br/>
           <span tal:content="item.addr_city"/><br/>

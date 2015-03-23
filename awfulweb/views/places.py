@@ -4,7 +4,6 @@ from datetime import datetime
 import logging
 import requests
 import urllib
-import logging
 from awfulweb.views import (
     get_authenticated_user,
     site_layout,
@@ -113,14 +112,15 @@ def view_places(request):
                                 )
             
 
-    if 'place.submitted' in request.POST:
+    if 'place_select.submitted' in request.POST:
         name = request.POST['name']
+        cs_id = request.POST['cs_id']
 
-        print "Name: %s User: %s" % (name, au['login'])
+        logging.info("Name: %s cs_id: %s User: %s" % (name, cs_id, au['login']))
         # Add it to the db
         try:
             utcnow = datetime.utcnow()
-            create = Place(name=name, updated_by=au['login'], created=utcnow, updated=utcnow)
+            create = Place(name=name, cs_id=cs_id, updated_by=au['login'], created=utcnow, updated=utcnow)
             DBSession.add(create)
             DBSession.flush()
         except Exception, e:
