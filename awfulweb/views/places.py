@@ -31,6 +31,7 @@ def view_places(request):
         name = request.POST['name']
 
         # get these settings from the form or fallback to config defaults
+        # FIXME: should be able to move this to the main function with some creativity
         try:
             home_lat = request.POST['home_lat']
             home_lon = request.POST['home_lon']

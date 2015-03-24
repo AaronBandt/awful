@@ -1,16 +1,15 @@
 from pyramid.view import view_config
 from pyramid.response import Response
-from sqlalchemy.sql import func
-from sqlalchemy import desc
-from sqlalchemy.sql import label
 from datetime import datetime
 from datetime import timedelta
 import arrow
-from dateutil import tz
+import urllib
 from awfulweb.views import (
     get_authenticated_user,
     site_layout,
     log,
+    _cs_api_query,
+    SearchResult,
     )
 from awfulweb.models import (
     DBSession,
@@ -48,6 +47,8 @@ def view_home(request):
     # number in days before next visit allowed.
     visit_threshold = 5
     places_response = []
+    geo_places_ids = []
+    cs_pub_code = request.registry.settings['awful.cs_pub_code']
     awfulites = []
 #    awfulites = ['aaron.bandt@citygridmedia.com', 'user1@aaronbandt.com', 'julie@gmail.com']
 
@@ -56,8 +57,50 @@ def view_home(request):
         display = True
 
         try:
-            q = DBSession.query(Place)
+            # get these settings from the form or fallback to config defaults
+            # FIXME: should be able to move this to the main function with some creativity
+            try:
+                home_lat = request.POST['home_lat']
+                home_lon = request.POST['home_lon']
+                log.info("Got lat: %s lon: %s from browser" % (home_lat,home_lon))
+            except:
+                home_lat = request.registry.settings['awful.default_lat']
+                home_lon = request.registry.settings['awful.default_lon']
+                pass
+
+            try:
+                radius = request.POST['radius']
+            except:
+                radius = request.registry.settings['awful.default_radius']
+                pass
+
+            s = {'lat': home_lat, 'lon': home_lon, 'radius': radius}
+            api_endpoint = '/content/places/v2/search/latlon?&format=json&rpp=50&type=restaurant&publisher=' + cs_pub_code
+            req = api_endpoint + '&' + urllib.urlencode(s)
+            resp = _cs_api_query(req)
+
+            print "Number of responses: ", resp['results']['total_hits']
+            total_pages = (resp['results']['total_hits'] / 50) + 1
+            print "Total pages: ", total_pages
+            for r in resp['results']['locations']:
+                geo_places_ids.append(r['id'])
+
+            # get the rest
+            page = 2
+            while page <= total_pages:
+                new_req = req + '&page=' + str(page)
+                log.info("requesting page: %i" % (page))
+                resp = _cs_api_query(new_req)
+                for r in resp['results']['locations']:
+                    geo_places_ids.append(r['id'])
+                page += 1
+
+#            geo_places_ids = ['613773250', '731112440']
+            q = DBSession.query(Place).filter(Place.cs_id.in_(geo_places_ids))
             places = q.all()
+            for p in places:
+                print "Name: ", p.name
+                print "CS ID: ", p.cs_id
 
             # convert users to ids
             awfulite_ids = []
