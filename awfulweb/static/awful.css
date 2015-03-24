@@ -460,7 +460,7 @@ input.valid, textarea.valid{
 }
 
 #results_container_inner {
-    width:500px;
+    width:600px;
 }
 
 #results_container h2{
@@ -474,14 +474,17 @@ input.valid, textarea.valid{
 }
 
 #results{
-    width:500px;
+    width:600px;
     height:100px;
     position:relative;
 }
 
 #results .prevButton{
-    display: inline;
-    width:45px;
+    width:25px;
+    height:45px;
+    font-size: 2em;
+    font-weight: 600;
+    top:10%;
     position:absolute;
     cursor:pointer;
     z-index:2000;
@@ -489,8 +492,11 @@ input.valid, textarea.valid{
 }
 
 #results .nextButton {
-    display: inline;
-    width:45px;
+    width:25px;
+    height:45px;
+    font-size: 2em;
+    font-weight: 600;
+    top:10%;
     position:absolute;
     cursor:pointer;
     z-index:2000;
@@ -503,7 +509,7 @@ input.valid, textarea.valid{
 
 #results ul{
     width:500px;
-    height:45px;
+    height:90px;
     margin-left:50px;
     padding-left:0px;
     list-style:none outside none;
@@ -538,6 +544,12 @@ input.valid, textarea.valid{
     font-size: 75%;
     font-weight: 300;
     display:inline;
+}
+
+#result_pain {
+    font-size: 95%;
+    font-weight: 300;
+    display:block;
 }
 
 /* Search Results */

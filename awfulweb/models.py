@@ -133,4 +133,3 @@ class LastVisit(Base):
     date            = Column(TIMESTAMP, nullable=False)
     place           = relationship("Place", backref=backref('last_visit'))
 
-

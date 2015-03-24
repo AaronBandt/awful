@@ -65,8 +65,8 @@
           <label for="user_${user.user_id}">${user.first_name} ${user.last_name}</label>
         </div>
         <div id="whereto_submit">
+          <input type="hidden" id="whereto_submitted" name="whereto.submitted"/>
           <input class="button" type="submit" name="whereto_submit" value="Where to?"/>
-          <input type="hidden" id="whereto_submitted" name="whereto_submitted"/>
         </div>
         </form>
       </div>
@@ -83,22 +83,25 @@
         <div id="results_container_inner">
           <div id="results">
             <ul>
-              <li tal:repeat="item results"><span id="result_title">${item.Rating.place.name}</span> <span id="result_rating">(${item.average})</span></li>
+              <li tal:repeat="item places_response">
+                <span id="result_title">${item.name}</span>
+                <span id="result_rating">(${item.avg})</span>
+                <span tal:condition="item.pa" id="result_pain">PITA: ${item.pa}</span>
+                <form name="lets_ride" id="lets_ride" method="POST" action="/">
+                <input type="hidden" name="lets_ride.submitted"/>
+                <input type="hidden" name="place_id" value="${item.place_id}">
+                <input tal:repeat="a awfulites" type="hidden" name="awfulite" value="${a}">
+                <input class="button" type="submit" name="ride" value="Let's Ride!"/>
+                </form>
+              </li>
             </ul>
-            <input class="button prevButton" type="submit" name="previous" value="Wait..."/>
-            <input class="button nextButton" type="submit" name="next" value="Gross..."/>
+            <input class="button prevButton" type="submit" name="previous" value="<"/>
+            <input class="button nextButton" type="submit" name="next" value=">"/>
           </div>
         </div>
         <div id="results_container_lower">
         </div>
       </div>
-
-      <div tal:repeat="item places_response">
-          <span>${item.name}</span>
-          <span>${item.avg}</span>
-          <span>${item.pa}</span>
-      </div>
-
 
   </div>
 </div>

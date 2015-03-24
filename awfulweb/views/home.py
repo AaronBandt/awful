@@ -3,7 +3,8 @@ from pyramid.response import Response
 from sqlalchemy.sql import func
 from sqlalchemy import desc
 from sqlalchemy.sql import label
-import datetime
+from datetime import datetime
+from datetime import timedelta
 import arrow
 from dateutil import tz
 from awfulweb.views import (
@@ -22,16 +23,18 @@ from awfulweb.models import (
 
 class PlaceResponse(object):
     name = ""
+    place_id = ""
     avg = ""
     pa = ""
 
-    def __init__(self, name, avg, pa):
+    def __init__(self, name, place_id, avg, pa):
         self.name = name
+        self.place_id = place_id
         self.avg = avg
         self.pa = pa
 
-def _place_response(name, avg, pa):
-    response = PlaceResponse(name, avg, pa)
+def _place_response(name, place_id, avg, pa):
+    response = PlaceResponse(name, place_id, avg, pa)
     return response
 
 
@@ -42,17 +45,109 @@ def view_home(request):
     has_reviews = False
     display = False
     results = False
-    visit_threshold = 1
-    awfulite = ['aaron.bandt@citygridmedia.com', 'user1@aaronbandt.com', 'julie@gmail.com']
+    # number in days before next visit allowed.
+    visit_threshold = 5
+    places_response = []
+    awfulites = []
+#    awfulites = ['aaron.bandt@citygridmedia.com', 'user1@aaronbandt.com', 'julie@gmail.com']
 
-    if 'whereto_submitted' in request.POST:
-        p = request.POST.getall('awfulite')
-
-        q = DBSession.query(Rating,
-            label('average', func.avg(Rating.rating))).filter(Rating.updated_by.in_(p)).group_by(Rating.place_id).order_by(desc('average'))
-        results = q.all()
-
+    if 'whereto.submitted' in request.POST:
+        awfulites = request.POST.getall('awfulite')
         display = True
+
+        try:
+            q = DBSession.query(Place)
+            places = q.all()
+
+            # convert users to ids
+            awfulite_ids = []
+            for a in awfulites:
+                try:
+                    q = DBSession.query(User).filter(User.user_name==a)
+                    result = q.one()
+                    awfulite_ids.append(result.user_id)
+                except Exception, e:
+                    conn_err_msg = e
+                    return Response(str(conn_err_msg), content_type='text/plain', status_int=500)
+    
+            # Check the places and remove ones that have a last visit date
+            # less than the threshold
+            for p in places:
+                for v in p.last_visit:
+                    if v.user_id in awfulite_ids:
+                        utc_server_now = arrow.utcnow().naive
+                        if not v.date < utc_server_now - timedelta(days=visit_threshold):
+                            log.info('REMOVING from results: %s' % (p.name))
+                            # FIXME: need something better than just catching the exception
+                            try:
+                                places.remove(p)
+                            except:
+                                pass
+    
+            # Find all the ratings by the included AWFULites
+            for p in places:
+                ratings = {}
+                log.debug('PLACE: %s' % (p.name))
+                for r in p.ratings:
+                    pa = None
+                    if r.updated_by in awfulites:
+                         log.debug('Rated by: %s Rating: %s' % (r.updated_by, r.rating))
+                         ratings[r.updated_by] = r.rating
+    
+                if ratings:
+                    avg = float("{0:.2f}".format(sum(ratings.values())/float(len(ratings))))
+                    log.debug('Average: %s' % (avg))
+                    if len(ratings) > 1:
+                        pa = min(ratings, key=ratings.get)
+                        log.debug('Biggest pain in the ass: %s' %(pa))
+    
+                    places_response.append(_place_response(p.name, p.place_id, avg, pa))
+    
+            # Sort by rating
+            places_response.sort(key=lambda x: x.avg, reverse=True)
+    
+        except Exception, e:
+            conn_err_msg = e
+            return Response(str(conn_err_msg), content_type='text/plain', status_int=500)
+
+    if 'lets_ride.submitted' in request.POST:
+        awfulites = request.POST.getall('awfulite')
+        place_id = request.POST.get('place_id')
+
+        # Add a last visit record for each awfulite
+        for a in awfulites:
+ 
+            try:
+                q = DBSession.query(User).filter(User.user_name==a)
+                result = q.one()
+                user_id = result.user_id
+            except Exception, e:
+                conn_err_msg = e
+                return Response(str(conn_err_msg), content_type='text/plain', status_int=500)
+
+            # if they have a record update it, else create
+            q = DBSession.query(LastVisit).filter(LastVisit.place_id==place_id, LastVisit.user_id==user_id)
+            check = DBSession.query(q.exists()).scalar()
+            utcnow = datetime.utcnow()
+            if check:
+                try:
+                    log.info("Updating last_visit record for awfulite: %s for place_id: %s" % (a, place_id))
+                    this_record = DBSession.query(LastVisit).filter(LastVisit.place_id==place_id, LastVisit.user_id==user_id).one()
+                    this_record.date = utcnow
+                    DBSession.flush()
+                except Exception, e:
+                    conn_err_msg = e
+                    return Response(str(conn_err_msg), content_type='text/plain', status_int=500)
+
+            else:
+                try:
+                    log.info("Adding last_visit record for awfulite: %s for place_id: %s" % (a, place_id))
+                    create = LastVisit(place_id=place_id, user_id=user_id, date=utcnow)
+                    DBSession.add(create)
+                    DBSession.flush()
+                except Exception, e:
+                    conn_err_msg = e
+                    return Response(str(conn_err_msg), content_type='text/plain', status_int=500)
 
     try:
         log.info('checking for ratings for user: %s' % au['login'])
@@ -60,46 +155,6 @@ def view_home(request):
         total = q.count()
         if total:
             has_reviews = True
-
-        q = DBSession.query(Place)
-        places = q.all()
-
-        # Check the places and remove ones that have a last visit date
-        # less than the threshold
-        for p in places:
-            for v in p.last_visit:
-#                utc_date = arrow.get(v.date)
-#                localized_db_date = utc_date.to('US/Pacific')
-#                print "LOCALIZED DB DATE IS: ", localized_db_date
-                utc_server_now = arrow.utcnow().naive
-                if not v.date < utc_server_now-datetime.timedelta(days=visit_threshold):
-                    print 'REMOVING from results: ', p.name
-                    places.remove(p)
-
-        # Find all the ratings by the included AWFULites
-        places_response = []
-        for p in places:
-            ratings = {}
-            print "PLACE: ", p.name
-            for r in p.ratings:
-                pa = None
-                if r.updated_by in awfulite:
-                     print "Rated by: %s Rating: %s" % (r.updated_by, r.rating)
-                     ratings[r.updated_by] = r.rating
-
-            if ratings:
-                avg = float("{0:.2f}".format(sum(ratings.values())/float(len(ratings))))
-                print "Average: %s" % (avg)
-                if len(ratings) > 1:
-                    pa = min(ratings, key=ratings.get)
-                    print "Biggest pain in the ass: ", pa
-
-                places_response.append(_place_response(p.name, avg, pa))
-
-        # Sort by rating
-        places_response.sort(key=lambda x: x.avg, reverse=True)
-
-
     except Exception, e:
         conn_err_msg = e
         return Response(str(conn_err_msg), content_type='text/plain', status_int=500)
@@ -115,5 +170,6 @@ def view_home(request):
             'display': display,
             'results': results,
             'places_response': places_response,
+            'awfulites': awfulites,
            }
 
