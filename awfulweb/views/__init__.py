@@ -2,6 +2,7 @@ from pyramid.renderers import get_renderer
 from pyramid.httpexceptions import HTTPFound
 from pyramid.session import signed_deserialize
 import logging
+import requests
 from passlib.hash import sha512_crypt
 from awfulweb.models import (
     DBSession,
@@ -10,6 +11,49 @@ from awfulweb.models import (
     )
 
 log = logging.getLogger(__name__)
+
+class SearchResult(object):
+
+    def __init__(self, name, cs_id, lat, lon, addr_street, addr_city, addr_state, addr_zip, phone, website):
+        self.name = name
+        self.cs_id = cs_id
+        self.lat = lat
+        self.lon = lon
+        self.addr_street = addr_street
+        self.addr_city = addr_city
+        self.addr_state = addr_state
+        self.addr_zip = addr_zip
+        self.phone = phone
+        self.website = website
+
+
+def _cs_api_query(req):
+
+    # Hardcode for now
+    verify_ssl = False
+    api_protocol = 'http'
+    api_host = 'api.citygridmedia.com'
+
+    # This becomes the api call
+    api_url = (api_protocol
+               + '://'
+               + api_host
+               + req)
+
+    logging.info('Requesting data from API: %s' % api_url)
+    r = requests.get(api_url, verify=verify_ssl)
+
+    if r.status_code == requests.codes.ok:
+
+        logging.debug('Response data: %s' % r.json())
+        return r.json()
+
+    else:
+
+        logging.info('There was an error querying the API: '
+                      'http_status_code=%s,reason=%s,request=%s'
+                      % (r.status_code, r.reason, api_url))
+        return None
 
 
 def site_layout():
