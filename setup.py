@@ -25,7 +25,7 @@ requires = [
     ]
 
 setup(name='awfulweb',
-      version='0.2',
+      version='0.3',
       description='Awful web api/ui',
       long_description=README + '\n\n' + CHANGELOG,
       classifiers=[
