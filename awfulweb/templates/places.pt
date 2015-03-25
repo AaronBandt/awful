@@ -23,7 +23,7 @@
           {
             var lat = position.coords.latitude;
             var long = position.coords.longitude;
-//#            alert('Could not find location');
+#            alert('Could not find location');
             addHidden(theForm, 'home_lat', lat);
             addHidden(theForm, 'home_lon', long);
           }
