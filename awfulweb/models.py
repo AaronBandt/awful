@@ -6,6 +6,7 @@ from sqlalchemy import (
     Column,
     Integer,
     Text,
+    DECIMAL,
     TIMESTAMP,
     ForeignKey,
     )
@@ -99,6 +100,8 @@ class Place(Base):
     place_id         = Column(Integer, primary_key=True, nullable=False)
     cs_id            = Column(Integer, nullable=False)
     name             = Column(Text, nullable=False)
+    lat              = Column(DECIMAL, nullable=False)
+    lon              = Column(DECIMAL, nullable=False)
     updated_by       = Column(Text, nullable=False)
     created          = Column(TIMESTAMP, nullable=False)
     updated          = Column(TIMESTAMP, nullable=False)

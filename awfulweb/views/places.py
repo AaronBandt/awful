@@ -73,12 +73,14 @@ def view_places(request):
     if 'place_select.submitted' in request.POST:
         name = request.POST['name']
         cs_id = request.POST['cs_id']
+        lat = request.POST['lat']
+        lon = request.POST['lon']
 
         logging.info("Name: %s cs_id: %s User: %s" % (name, cs_id, au['login']))
         # Add it to the db
         try:
             utcnow = datetime.utcnow()
-            create = Place(name=name, cs_id=cs_id, updated_by=au['login'], created=utcnow, updated=utcnow)
+            create = Place(name=name, cs_id=cs_id, lat=lat, lon=lon, updated_by=au['login'], created=utcnow, updated=utcnow)
             DBSession.add(create)
             DBSession.flush()
         except Exception, e:

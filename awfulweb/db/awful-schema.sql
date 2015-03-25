@@ -58,6 +58,8 @@ CREATE TABLE `places` (
   `place_id`           mediumint(9) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `cs_id`              bigint(1) UNSIGNED NOT NULL,
   `name`               varchar(250) COLLATE utf8_bin NOT NULL,
+  `lat`                DECIMAL(17,14) NOT NULL,
+  `lon`                DECIMAL(17,14) NOT NULL,
   `updated_by`         varchar(200) NOT NULL,
   `created`            timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated`            timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
