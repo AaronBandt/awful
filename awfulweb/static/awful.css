@@ -555,6 +555,6 @@ input.valid, textarea.valid{
 /* Search Results */
 .search_results {
     width: 500px;
-    height: 300px;
+    height: 420px;
     display: inline-block;
 }

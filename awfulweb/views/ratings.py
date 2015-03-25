@@ -48,9 +48,11 @@ def view_ratings(request):
         q = DBSession.query(Rating)
         q = q.filter(Rating.updated_by==au['login'])
         rated = q.all()
+        rated.sort(key=lambda x: x.place.name, reverse=False)
 
         q = DBSession.query(Place).filter(~exists().where(and_(Place.place_id == Rating.place_id, Rating.updated_by == au['login'])))
         unrated = q.all()
+        unrated.sort(key=lambda x: x.name, reverse=False)
 
     except Exception, e:
         conn_err_msg = e
