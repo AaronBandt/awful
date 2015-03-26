@@ -71,18 +71,20 @@ def view_places(request):
 
         for r in resp['results']['locations']:
             if not _contains(places, lambda x: x.cs_id == r['id']):
-                search_results.append(SearchResult(r['name'], 
-                                                  r['id'],
-                                                  r['latitude'],
-                                                  r['longitude'],
-                                                  r['address']['street'],
-                                                  r['address']['city'],
-                                                  r['address']['state'],
-                                                  r['address']['postal_code'],
-                                                  r['phone_number'],
-                                                  r['website']
-                                                 )
-                                    )
+                # Don't show places that are flagged as closed
+                if not r['business_operation_status'] == 0:
+                    search_results.append(SearchResult(r['name'], 
+                                                      r['id'],
+                                                      r['latitude'],
+                                                      r['longitude'],
+                                                      r['address']['street'],
+                                                      r['address']['city'],
+                                                      r['address']['state'],
+                                                      r['address']['postal_code'],
+                                                      r['phone_number'],
+                                                      r['website']
+                                                     )
+                                        )
 
         result_count = len(search_results)
 
