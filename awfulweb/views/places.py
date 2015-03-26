@@ -8,6 +8,7 @@ from awfulweb.views import (
     site_layout,
     _cs_api_query,
     SearchResult,
+    log,
     )
 from awfulweb.models import (
     DBSession,
@@ -41,16 +42,19 @@ def view_places(request):
         try:
             home_lat = request.POST['home_lat']
             home_lon = request.POST['home_lon']
-            logging.info("Got lat: %s lon: %s from browser" % (home_lat,home_lon))
+            log.info("Got lat: %s lon: %s from browser" % (home_lat,home_lon))
         except:
             home_lat = request.registry.settings['awful.default_lat']
             home_lon = request.registry.settings['awful.default_lon']
+            log.info("Using default lat: %s lon: %s" % (home_lat,home_lon))
             pass
 
         try:
             radius = request.POST['radius']
+            log.info("Got radius: %s from browser" % (radius))
         except:
             radius = request.registry.settings['awful.default_radius']
+            log.info("Using defaul radius: %s" % (radius))
             pass
 
         s = {'what': name, 'lat': home_lat, 'lon': home_lon, 'radius': radius}
@@ -94,7 +98,7 @@ def view_places(request):
         lat = request.POST['lat']
         lon = request.POST['lon']
 
-        logging.info("Name: %s cs_id: %s User: %s" % (name, cs_id, au['login']))
+        log.info("Name: %s cs_id: %s User: %s" % (name, cs_id, au['login']))
         # Add it to the db
         try:
             utcnow = datetime.utcnow()

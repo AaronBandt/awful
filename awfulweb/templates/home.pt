@@ -3,6 +3,36 @@
 
       <script src="/static/jquery-2.1.3.min.js"></script>
       <script>
+        // Ask for lat/lon and if we get it, insert it into the form.
+        window.onload = function ()
+        {
+          navigator.geolocation.getCurrentPosition(foundLocation, noLocation);
+
+          function addHidden(theForm, key, value) {
+              // Create a hidden input element, and append it to the form:
+              var input = document.createElement('input');
+              input.type = 'hidden';
+              input.name = key;
+              input.value = value;
+              theForm.appendChild(input);
+          }
+
+          var theForm = document.forms['whereto'];
+
+          function foundLocation(position)
+          {
+            var lat = position.coords.latitude;
+            var long = position.coords.longitude;
+            addHidden(theForm, 'home_lat', lat);
+            addHidden(theForm, 'home_lon', long);
+          }
+          function noLocation()
+          {
+            alert('Could not find location');
+          }
+        }
+      </script>
+      <script>
         $(window).load(function(){
                 var pages = $('#results li'), current=0;
                 var currentPage,nextPage;
@@ -59,7 +89,7 @@
       <div tal:condition="has_reviews and not display">
         <h2>Go eat something AWFUL with these people</h2>
 
-        <form id="whereto" action="/" method="POST">
+        <form name="whereto" id="whereto" action="/" method="POST">
         <div class="user_cb row" tal:condition="has_reviews" tal:repeat="user all_users">
           <input id="user_${user.user_id}" type="checkbox" name="awfulite" value="${user.user_name}">
           <label for="user_${user.user_id}">${user.first_name} ${user.last_name}</label>

@@ -49,7 +49,11 @@ def view_home(request):
 
     if 'whereto.submitted' in request.POST:
         awfulites = request.POST.getall('awfulite')
+        # always include the logged in user
+        awfulites.append(au['login'])
         display = True
+
+        print "Calculating places for these awfulites: ", awfulites
 
         # convert users to ids
         # FIXME: Query once with in_?
@@ -73,12 +77,15 @@ def view_home(request):
             except:
                 home_lat = float(request.registry.settings['awful.default_lat'])
                 home_lon = float(request.registry.settings['awful.default_lon'])
+                log.info("Using default lat: %s lon: %s" % (home_lat,home_lon))
                 pass
 
             try:
                 radius = float(request.POST['radius'])
+                log.info("Got radius: %s from browser" % (radius))
             except:
                 radius = float(request.registry.settings['awful.default_radius'])
+                log.info("Using default radius: %s" % (radius))
                 pass
 
             # Find everything that's close
@@ -191,7 +198,7 @@ def view_home(request):
         conn_err_msg = e
         return Response(str(conn_err_msg), content_type='text/plain', status_int=500)
 
-    q = DBSession.query(User)
+    q = DBSession.query(User).filter(~(User.user_name==au['login']))
     all_users = q.all()
 
     return {'layout': site_layout(),
