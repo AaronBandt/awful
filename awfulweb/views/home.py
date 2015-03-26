@@ -52,6 +52,7 @@ def view_home(request):
         display = True
 
         # convert users to ids
+        # FIXME: Query once with in_?
         awfulite_ids = []
         for a in awfulites:
             try:

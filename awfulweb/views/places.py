@@ -17,6 +17,12 @@ from awfulweb.models import (
 # requests is chatty
 logging.getLogger("requests").setLevel(logging.WARNING)
 
+def _contains(list, filter):
+    for x in list:
+        if filter(x):
+            return True
+    return False
+
 
 @view_config(route_name='places', permission='view', renderer='awfulweb:templates/places.pt')
 def view_places(request):
@@ -48,27 +54,37 @@ def view_places(request):
             pass
 
         s = {'what': name, 'lat': home_lat, 'lon': home_lon, 'radius': radius}
-        api_endpoint = '/content/places/v2/search/latlon?&format=json&publisher=' + cs_pub_code
+        api_endpoint = '/content/places/v2/search/latlon?type=restaurant&format=json&publisher=' + cs_pub_code
         req = api_endpoint + '&' + urllib.urlencode(s)
         resp = _cs_api_query(req)
 
         search = True
         print "Number of responses: ", resp['results']['total_hits']
+
+        # get all the places so we can remove ones fromt he search 
+        # that have already been added.
+        # FIXME: This is not effficient. Also misleading in the seatch results.
+        # Might be better to just catch the exception when trying to add a 
+        # place that exists.
+        q = DBSession.query(Place)
+        places = q.all()
+
         for r in resp['results']['locations']:
-            result_count = resp['results']['total_hits']
-            search_results.append(SearchResult(r['name'], 
-                                              r['id'],
-                                              r['latitude'],
-                                              r['longitude'],
-                                              r['address']['street'],
-                                              r['address']['city'],
-                                              r['address']['state'],
-                                              r['address']['postal_code'],
-                                              r['phone_number'],
-                                              r['website']
-                                             )
-                                )
-            
+            if not _contains(places, lambda x: x.cs_id == r['id']):
+                search_results.append(SearchResult(r['name'], 
+                                                  r['id'],
+                                                  r['latitude'],
+                                                  r['longitude'],
+                                                  r['address']['street'],
+                                                  r['address']['city'],
+                                                  r['address']['state'],
+                                                  r['address']['postal_code'],
+                                                  r['phone_number'],
+                                                  r['website']
+                                                 )
+                                    )
+
+        result_count = len(search_results)
 
     if 'place_select.submitted' in request.POST:
         name = request.POST['name']

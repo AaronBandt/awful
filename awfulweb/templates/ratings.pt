@@ -3,33 +3,38 @@
 
       <script src="/static/jquery-2.1.3.min.js"></script>
       <script src="/static/jquery.barrating.min.js"></script>
+        <div>
+          <a href="/ratings?show=unrated" tal:condition="show == 'rated'">SHOW UNRATED</a>
+          <a href="/ratings?show=rated" tal:condition="show == 'unrated'">SHOW RATED</a>
+        </div>
+
         <div id="pag_container">
 
           <div tal:attributes="class 'pag_buttons disable' if offset == 0 else 'pag_buttons'">
-            <a tal:attributes="href '?sort_type=%s&sort_order=%s&start=0' % (sort_type,sort_order)"><img src='/static/nav-le.gif' border='0'></a>
+            <a tal:attributes="href '?sort_type=%s&sort_order=%s&show=%s&start=0' % (sort_type,sort_order,show)"><img src='/static/nav-le.gif' border='0'></a>
           </div>
           <div tal:attributes="class 'pag_buttons disable' if offset == 0 else 'pag_buttons'">
-            <a tal:attributes="href '?sort_type=%s&sort_order=%s&start=%d' % (sort_type,sort_order,offset-perpage)"><img src='/static/nav-l.gif' border='0'></a>
+            <a tal:attributes="href '?sort_type=%s&sort_order=%s&show=%s&start=%d' % (sort_type,sort_order,show,offset-perpage)"><img src='/static/nav-l.gif' border='0'></a>
           </div>
           <div class="pag_content">
-            <span tal:content="'%d-%d of %d' % (offset+1, min((offset+perpage),total_rated), total_rated)">
+            <span tal:content="'%d-%d of %d' % (offset+1, min((offset+perpage),total), total)">
               1-10 of 123
             </span>
           </div>
-          <div tal:attributes="class 'pag_buttons disable' if (offset+perpage) &gt;= total_rated else 'pag_buttons'">
-            <a tal:attributes="href '?sort_type=%s&sort_order=%s&start=%d' % (sort_type,sort_order,offset+perpage)"><img src='/static/nav-r.gif' border='0'></a>
+          <div tal:attributes="class 'pag_buttons disable' if (offset+perpage) &gt;= total else 'pag_buttons'">
+            <a tal:attributes="href '?sort_type=%s&sort_order=%s&show=%s&start=%d' % (sort_type,sort_order,show,offset+perpage)"><img src='/static/nav-r.gif' border='0'></a>
           </div>
-          <div tal:attributes="class 'pag_buttons disable' if (offset+perpage) &gt;= total_rated else 'pag_buttons'">
-            <a tal:attributes="href '?sort_type=%s&sort_order=%s&start=%d' % (sort_type,sort_order,(total_rated-1)/perpage*perpage)"><img src='/static/nav-re.gif' border='0'></a>
+          <div tal:attributes="class 'pag_buttons disable' if (offset+perpage) &gt;= total else 'pag_buttons'">
+            <a tal:attributes="href '?sort_type=%s&sort_order=%s&show=%s&start=%d' % (sort_type,sort_order,show,(total-1)/perpage*perpage)"><img src='/static/nav-re.gif' border='0'></a>
           </div>
         </div>
 
 
-      <div>
-         <h2>Places that might be AWFUL. (${total_unrated} total)</h2>
+      <div tal:condition="not rated">
+         <h2>Places that might be AWFUL. (${total} total)</h2>
       </div>
 
-      <div tal:condition="not unrated">
+      <div tal:condition="not unrated and not rated">
          No such thing, everything is AWFUL.
       </div>
 
@@ -75,8 +80,8 @@
         </div>
       </div>
 
-      <div>
-         <h2>Places you know are AWFUL. (${total_rated} total)</h2>
+      <div tal:condition="rated">
+         <h2>Places you know are AWFUL. (${total} total)</h2>
       </div>
 
 

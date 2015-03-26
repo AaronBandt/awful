@@ -572,20 +572,19 @@ input.valid, textarea.valid{
     display:inline-block;
     padding: 3px 5px;
     border-radius: 3px;
-    background: #2FAACE;
+    background: #4C494C;
 }
 
 .pag_buttons:hover,
 .pag_buttons:hover a {
-    color: #2FAACE;
+    color: #927E74;
     text-decoration: none;
-    background: #FF0099;
+    background: #927E74;
 
 }
 
 .pag_buttons a {
     color: #000000;
-    background: #2FAACE;
     height: 15px;
     width: 20px;
     text-decoration: none;
@@ -598,13 +597,12 @@ input.valid, textarea.valid{
 }
 
 .pag_buttons a:hover {
-    color: #2FAACE;
     text-decoration: none;
-    background: #FF0099;
 
 }
+.pag_buttons:active,
 .pag_buttons a:active {
-    color: #CEFFFD;
+    background: #E3DDD6;
 }
 
 .disable {

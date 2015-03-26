@@ -19,9 +19,12 @@ def view_ratings(request):
     page_title = 'Your AWFUL ratings.'
     au = get_authenticated_user(request)
     perpage = 10
+    rated = None
+    unrated = None
 
     params = {'sort_type': 'a',
-              'sort_order': 'a',
+              'sort_order': 'asc',
+              'show': 'unrated',
               'start': 0
              }
     for p in params:
@@ -32,6 +35,7 @@ def view_ratings(request):
 
     sort_type = params['sort_type']
     sort_order = params['sort_order']
+    show = params['show']
     offset = int(params['start'])
 
     if 'rating.submitted' in request.POST:
@@ -60,29 +64,20 @@ def view_ratings(request):
             return Response(str(conn_err_msg), content_type='text/plain', status_int=500)
 
     try:
-        q = DBSession.query(Rating)
-        q = q.filter(Rating.updated_by==au['login'])
-        q = q.join(Place)
-        total_rated = q.count()
-        # FIXME: feels like this should be better
-        if sort_type == 'a':
-            if sort_order == 'd':
-                rated = q.order_by(Place.name.desc()).limit(perpage).offset(offset)
-            else:
-                rated = q.order_by(Place.name.asc()).limit(perpage).offset(offset)
-        else:
-            if sort_order == 'd':
-                rated = q.order_by(Rating.rating.desc()).limit(perpage).offset(offset)
-            else:
-                rated = q.order_by(Rating.rating.asc()).limit(perpage).offset(offset)
+        if show == 'rated':
+           q = DBSession.query(Rating)
+           q = q.filter(Rating.updated_by==au['login'])
+           q = q.join(Place)
+           total = q.count()
 
-
-        q = DBSession.query(Place).filter(~exists().where(and_(Place.place_id == Rating.place_id, Rating.updated_by == au['login'])))
-        total_unrated = q.count()
-        if sort_order == 'd':
-            unrated = q.order_by(Place.name.desc()).limit(perpage).offset(offset)
+           if sort_type == 'a':
+               rated = q.order_by(getattr(Place.name, sort_order)()).limit(perpage).offset(offset)
+           else:
+               rated = q.order_by(getattr(Rating.rating, sort_order)()).limit(perpage).offset(offset)
         else:
-            unrated = q.order_by(Place.name.asc()).limit(perpage).offset(offset)
+            q = DBSession.query(Place).filter(~exists().where(and_(Place.place_id == Rating.place_id, Rating.updated_by == au['login'])))
+            total = q.count()
+            unrated = q.order_by(getattr(Place.name, sort_order)()).limit(perpage).offset(offset)
 
 #        unrated.sort(key=lambda x: x.name, reverse=False)
 
@@ -94,11 +89,11 @@ def view_ratings(request):
             'page_title': page_title,
             'au': au,
             'perpage': perpage,
+            'show': show,
             'offset': offset,
             'sort_type': sort_type,
             'sort_order': sort_order,
-            'total_rated': total_rated,
-            'total_unrated': total_unrated,
+            'total': total,
             'rated': rated,
             'unrated': unrated,
            }
