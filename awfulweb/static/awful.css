@@ -1,5 +1,11 @@
 @import url(//fonts.googleapis.com/css?family=Coda:300,400,600,700);
 
+/* colors
+E3DDD6 - light
+927E74 - medium
+4C494C -dark
+*/
+
 body {
     font-family: "Coda", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 75%;
