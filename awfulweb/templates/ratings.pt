@@ -3,10 +3,6 @@
 
       <script src="/static/jquery-2.1.3.min.js"></script>
       <script src="/static/jquery.barrating.min.js"></script>
-        <div>
-          <a href="/ratings?show=unrated" tal:condition="show == 'rated'">SHOW UNRATED</a>
-          <a href="/ratings?show=rated" tal:condition="show == 'unrated'">SHOW RATED</a>
-        </div>
 
         <div id="pag_container">
 
@@ -32,6 +28,7 @@
 
       <div tal:condition="not rated">
          <h2>Places that might be AWFUL. (${total} total)</h2>
+          <a href="/ratings?show=rated" tal:condition="show == 'unrated'">SHOW RATED</a>
       </div>
 
       <div tal:condition="not unrated and not rated">
@@ -82,6 +79,7 @@
 
       <div tal:condition="rated">
          <h2>Places you know are AWFUL. (${total} total)</h2>
+          <a href="/ratings?show=unrated" tal:condition="show == 'rated' and not no_unrated">SHOW UNRATED</a>
       </div>
 
 

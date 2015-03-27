@@ -275,6 +275,11 @@ ul.user li.user:hover ul.user {
     color: #000;
 }
 
+.rating_parent {
+   border-bottom: 2px #ccc solid;
+}
+
+
 .success {
     color: #28921f;
 }

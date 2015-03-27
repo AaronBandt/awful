@@ -7,12 +7,12 @@ from awfulweb.views import (
     get_authenticated_user,
     site_layout,
     log,
+    get_nearby,
     )
 from awfulweb.models import (
     DBSession,
     User,
     Rating,
-    Place,
     LastVisit,
     )
 
@@ -43,7 +43,6 @@ def view_home(request):
     display = False
     results = False
     places_response = []
-    geo_places_ids = []
     awfulites = []
 
 
@@ -68,48 +67,7 @@ def view_home(request):
                 return Response(str(conn_err_msg), content_type='text/plain', status_int=500)
 
         try:
-            # get these settings from the form or fallback to config defaults
-            # FIXME: should be able to move this to the main function with some creativity
-            try:
-                home_lat = float(request.POST['home_lat'])
-                home_lon = float(request.POST['home_lon'])
-                log.info("Got lat: %s lon: %s from browser" % (home_lat,home_lon))
-            except:
-                home_lat = float(request.registry.settings['awful.default_lat'])
-                home_lon = float(request.registry.settings['awful.default_lon'])
-                log.info("Using default lat: %s lon: %s" % (home_lat,home_lon))
-                pass
-
-            try:
-                radius = float(request.POST['radius'])
-                log.info("Got radius: %s from browser" % (radius))
-            except:
-                radius = float(request.registry.settings['awful.default_radius'])
-                log.info("Using default radius: %s" % (radius))
-                pass
-
-            # Find everything that's close
-            query = """
-                    SELECT cs_id, (
-                                   3959 *
-                                   acos( cos( radians( %(lat)f ) ) *
-                                   cos( radians( lat ) ) *
-                                   cos( radians( lon ) -
-                                   radians( %(lon)f ) ) +
-                                   sin( radians( %(lat)f ) ) *
-                                   sin( radians( lat ) ) ) )
-                    AS distance
-                    FROM places HAVING distance < %(dist)f
-                    """ % {'lat': home_lat, 'lon': home_lon, 'dist': radius}
-            near_results = DBSession.query('cs_id').from_statement(query).all()
-            # FIXME: one day I will understand why this is giving me a keyed tuple
-            for r in near_results:
-                geo_places_ids.append(r[0])
-
-            q = DBSession.query(Place).filter(Place.cs_id.in_(geo_places_ids))
-            places = q.all()
-            for p in places:
-                log.info("Found place: %s CS_ID: %s" % (p.name, p.cs_id))
+            places = get_nearby(request)
 
             # Check the places and remove ones that have a last visit date
             # less than the threshold

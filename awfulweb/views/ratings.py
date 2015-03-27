@@ -21,6 +21,7 @@ def view_ratings(request):
     perpage = 10
     rated = None
     unrated = None
+    no_unrated = False
 
     params = {'sort_type': 'a',
               'sort_order': 'asc',
@@ -64,6 +65,16 @@ def view_ratings(request):
             return Response(str(conn_err_msg), content_type='text/plain', status_int=500)
 
     try:
+        if show == 'unrated':
+            q = DBSession.query(Place).filter(~exists().where(and_(Place.place_id == Rating.place_id, Rating.updated_by == au['login'])))
+            total = q.count()
+            unrated = q.order_by(getattr(Place.name, sort_order)()).limit(perpage).offset(offset)
+            # Show rated if there is nothing unrated
+            if total == 0:
+                show = 'rated'
+                # This doesn't work if you explicitly ask for rated
+                no_unrated = True
+
         if show == 'rated':
            q = DBSession.query(Rating)
            q = q.filter(Rating.updated_by==au['login'])
@@ -74,10 +85,6 @@ def view_ratings(request):
                rated = q.order_by(getattr(Place.name, sort_order)()).limit(perpage).offset(offset)
            else:
                rated = q.order_by(getattr(Rating.rating, sort_order)()).limit(perpage).offset(offset)
-        else:
-            q = DBSession.query(Place).filter(~exists().where(and_(Place.place_id == Rating.place_id, Rating.updated_by == au['login'])))
-            total = q.count()
-            unrated = q.order_by(getattr(Place.name, sort_order)()).limit(perpage).offset(offset)
 
 #        unrated.sort(key=lambda x: x.name, reverse=False)
 
@@ -96,4 +103,5 @@ def view_ratings(request):
             'total': total,
             'rated': rated,
             'unrated': unrated,
+            'no_unrated': no_unrated,
            }
