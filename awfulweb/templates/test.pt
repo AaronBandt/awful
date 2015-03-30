@@ -1,3 +1,8 @@
+<div metal:use-macro="layout">
+    <div metal:fill-slot="content">
+
+
+<!--
 <html lang="en-US"
       xmlns="http://www.w3.org/1999/xhtml">
   <head profile="http://www.w3.org/2005/10/profile">
@@ -5,68 +10,42 @@
     <link href="/static/awful.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
+-->
 
-      <script>
-        navigator.geolocation.getCurrentPosition(foundLocation, noLocation);
-        
-         function foundLocation(position)
-         {
-           var lat = position.coords.latitude;
-           var long = position.coords.longitude;
-           alert('Found location: ' + lat + ', ' + long);
-         }
-         function noLocation()
-         {
-           alert('Could not find location');
-         }
-      </script>
-
-    <style>
-      #map-canvas {
-        width: 300px;
-        height: 200px;
-      }
-    </style>
-    <script src="https://maps.googleapis.com/maps/api/js"></script>
-    <script>
-      function initialize() {
-
-        var mapCanvas = document.getElementById('map-canvas');
-        var mapOptions = {
-          center: new google.maps.LatLng(34.152354, -118.352469),
-          zoom: 15,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        }
-        var map = new google.maps.Map(mapCanvas, mapOptions)
-
-var myLatlng = new google.maps.LatLng(34.152354,-118.352469);
-var marker = new google.maps.Marker({
-  position: myLatlng,
-  map: map,
-  title:"Malbec, bitches"
-});
-
-      }
-      google.maps.event.addDomListener(window, 'load', initialize);
-    </script>
-
-
-        <div>
-            <form name="place" id="place" method="POST" action="/test">
-            <input type="hidden" name="place.submitted"/>
-            <input type="text" name="name" placeholder="Add an AWFUL place."/>
-            <input class="button" type="submit" name="submit" value="SEARCH."/>
-            </form>
+      <div>
+        <ul class="test">
+          <li>
+ <h1 class="test">Testing</h1>
+        <div id="pag_container">
+          <div tal:attributes="class 'pag_buttons'">
+            <a tal:attributes="href '/test'"><img src='/static/nav-le.gif' border='0'></a>
+          </div>
+          <div tal:attributes="class 'pag_buttons'">
+            <a tal:attributes="href '/test'"><img src='/static/nav-l.gif' border='0'></a>
+          </div>
+          <div class="pag_content">
+            <span>
+              1-10 of 123
+            </span>
+          </div>
+          <div tal:attributes="class 'pag_buttons'">
+            <a tal:attributes="href '/test'"><img src='/static/nav-r.gif' border='0'></a>
+          </div>
+          <div tal:attributes="class 'pag_buttons'">
+            <a tal:attributes="href '/test'"><img src='/static/nav-re.gif' border='0'></a>
+          </div>
         </div>
-      
+          </li>
+        </ul>
 
-    <div id="map-canvas"></div>
-
-
-
+      </div>
+<!--
   </body>
 </html>
+-->
 
 
+  </div>
+</div>
 
 

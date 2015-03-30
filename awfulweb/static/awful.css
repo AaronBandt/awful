@@ -19,10 +19,6 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 500;
 }
 
-h1, h2 {
-    border-bottom:1px solid #777;
-}
-
 p {
     font-weight: 300;
 }
@@ -119,16 +115,24 @@ tr th:last-child {
 /* Shell container */
 .shell {
     border:none;
-    margin:10px 50px;
+    margin:10px 10px;
     clear:both;
+}
+
+.body_shell {
+    display: table;
+    margin: 0 auto;
+    min-width: 700px;
 }
 
 /* Top navigation */
 .nav_shell {
     border: none;
-    margin: 10px 50px;
+    display: table;
+    margin: 0 auto;
     height:130px;
     position:relative;
+    min-width: 1000px;
 }
 
 .nav_logo {
@@ -139,6 +143,12 @@ tr th:last-child {
     float:left;
 }
 
+.nav_title {
+    position:absolute;
+    bottom:10px;
+    left:130px;
+}
+
 .nav_bar {
     background-color: #4c494c;
     border-radius:3px;
@@ -146,7 +156,7 @@ tr th:last-child {
     position:absolute;
     bottom:0px;
     left:127px;
-    width:92%;
+    width:865px;
 }
 
 .nav {
@@ -572,7 +582,8 @@ input.valid, textarea.valid{
 
 /* Pagination */
 #pag_container {
-    text-align:right;
+    display:inline;
+    float:right;
 }
 
 .pag_content {
@@ -627,3 +638,38 @@ input.valid, textarea.valid{
     background: #CCCCCC;
 }
 
+
+/* Testing */
+h1.nav_body {
+    display: inline;
+}
+
+ul.nav_body {
+    width:700px;
+    height:90px;
+    margin-left:50px;
+    padding-left:0px;
+    list-style:none outside none;
+    position:relative;
+    overflow:hidden;
+}
+
+.nav_body li {
+    border-bottom:1px solid #777;
+}
+
+/* underlines */
+.ul_light {
+   border-bottom: 1px #ccc solid;
+}
+
+.ul_dark {
+   border-bottom: 1px #000 solid;
+}
+
+/* whereto */
+#whereto_submit {
+   margin-top: 5px;
+   padding-top: 10px;
+   border-top: 1px #000 solid;
+}

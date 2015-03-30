@@ -92,7 +92,6 @@
       </div>
 
       <div tal:condition="has_reviews and not display">
-        <h2>Go eat something AWFUL with these people</h2>
 
         <form name="whereto" id="whereto" action="/" method="POST">
         <div class="user_cb row" tal:condition="has_reviews" tal:repeat="user all_users">
@@ -107,14 +106,6 @@
       </div>
 
       <div id="results_container" tal:condition="display">
-        <div id="results_header">
-          <h2>Go eat someplace AWFUL</h2>
-          <span class="results_restart">
-            <form name="start_over" id="start_over" method="GET" action="/">
-            <input class="button" type="submit" name="submit" value="Start Over"/>
-            </form>
-          </span>
-        </div>
         <div id="results_container_inner">
           <div id="results">
             <ul>

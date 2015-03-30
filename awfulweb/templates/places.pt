@@ -4,8 +4,10 @@
       <script src="https://maps.googleapis.com/maps/api/js"></script>
       <script>
         // Ask for lat/lon and if we get it, insert it into the form.
-        window.onload = function ()
-        {
+        $(function() {
+          // Disable the submit button until we're ready. Need it in
+          // case user does regular page reload instead of shift +
+          $("#PlaceSearchBtn").prop('disabled', true);
           navigator.geolocation.getCurrentPosition(foundLocation, noLocation);
 
           function addHidden(theForm, key, value) {
@@ -25,19 +27,21 @@
             var long = position.coords.longitude;
             addHidden(theForm, 'home_lat', lat);
             addHidden(theForm, 'home_lon', long);
+            $("#PlaceSearchBtn").prop('value', 'MEH.');
+            $("#PlaceSearchBtn").prop('disabled', false);
           }
           function noLocation()
           {
             alert('Could not find location');
           }
-        }
+        });
       </script>
 
       <div>
           <form name="place_search" id="place" method="POST" action="/places">
           <input type="hidden" name="place_search.submitted"/>
           <input type="text" name="name" placeholder="Search for a new AWFUL place."/>
-          <input class="button" type="submit" name="submit" value="MEH."/>
+          <input id="PlaceSearchBtn" class="button" type="submit" name="submit" value="WAIT..." disabled="true"/>
           </form>
       </div>
 
@@ -90,7 +94,7 @@
           <span tal:content="item.addr_zip"/><br/>
           <span tal:condition="item.phone" tal:content="'(' + item.phone[:3] + ')' + item.phone[3:6] + '-' + item.phone[6:10]"/><br/>
           <span tal:condition="item.website"><a href="${item.website}?publisher=${cs_pub_code}">website</a></span><br/>
-          <input class="button" type="submit" name="submit" value="This One"/>
+          <input class="button" type="submit" name="submit" value="Add This Place"/>
           </form>
 
           <div id="map-canvas-${item.cs_id}"></div>
@@ -99,7 +103,7 @@
       </div>
 
       <div tal:condition="not search">
-        <h2>AWFUL Places</h2>
+        <h2 class="ul_light">AWFUL Places</h2>
 
         <div tal:repeat="item places" class="row">
           <span tal:content="item.name"/> 

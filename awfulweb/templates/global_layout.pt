@@ -19,6 +19,9 @@
         <div class="nav_logo">
           <img src="/static/logo-small.png">
         </div>
+        <div class="nav_title">
+          <h1>I ate lunch once. It was AWFUL.</h1>
+        </div>
         <div class="nav_bar">
             <span>
               <a class="nav" href="/">HOME</a>
@@ -56,8 +59,8 @@
         </div>
       </div>
 
-      <div class="shell">
-        <h1 tal:condition="page_title is not 'Login'">${page_title}</h1>
+      <div class="body_shell">
+        <h1 class="ul_dark" tal:condition="page_title is not 'Login'">${page_title}</h1>
 
         <div metal:define-slot="content"> </div>
 

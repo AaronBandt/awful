@@ -4,6 +4,7 @@
       <script src="/static/jquery-2.1.3.min.js"></script>
       <script src="/static/jquery.barrating.min.js"></script>
 
+      <div class="body_shell">
         <div id="pag_container">
 
           <div tal:attributes="class 'pag_buttons disable' if offset == 0 else 'pag_buttons'">
@@ -27,7 +28,6 @@
 
 
       <div tal:condition="not rated">
-         <h2>Places that might be AWFUL. (${total} total)</h2>
           <a href="/ratings?show=rated" tal:condition="show == 'unrated'">SHOW RATED</a>
       </div>
 
@@ -78,7 +78,6 @@
       </div>
 
       <div tal:condition="rated">
-         <h2>Places you know are AWFUL. (${total} total)</h2>
           <a href="/ratings?show=unrated" tal:condition="show == 'rated' and not no_unrated">SHOW UNRATED</a>
       </div>
 
@@ -124,6 +123,8 @@
             <span class="success" id="span_${item.place_id}" style="display:none">We know, that place is AWFUL.</span>
         </div>
       </div>
+
+    </div>
 
 
   </div>

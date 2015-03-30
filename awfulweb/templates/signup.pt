@@ -62,7 +62,7 @@
 
   <div id="login">
       <p class="login">
-      <img src="/static/logo-large.png">
+      <img src="/static/logo-medium.png">
       <span id="login_header">AWFUL</span>
       <p class="login_subtext">(A Wish For Unfettered Lunch)</p>
       </p>
@@ -74,11 +74,6 @@
         <form id="signup" action="/signup" method="POST">
 
           <div>
-            <input type="email" id="signup_user_name" name="user_name" placeholder="email address"/>
-            <span class="form_error">A valid email address is required</span>               
-          </div>                  
-      
-          <div>
             <input type="text" id="signup_first_name" name="first_name" placeholder="first name"/>
             <span class="form_error">Your first name is required</span>               
           </div>
@@ -86,6 +81,11 @@
           <div>
             <input type="text" id="signup_last_name" name="last_name" placeholder="last name"/>
             <span class="form_error">Your last name is required</span>               
+          </div>
+
+          <div>
+            <input type="email" id="signup_user_name" name="user_name" placeholder="email address"/>
+            <span class="form_error">A valid email address is required</span>
           </div>
 
           <div>

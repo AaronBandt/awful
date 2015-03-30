@@ -16,7 +16,7 @@ from awfulweb.models import (
 
 @view_config(route_name='ratings', permission='view', renderer='awfulweb:templates/ratings.pt')
 def view_ratings(request):
-    page_title = 'Your AWFUL ratings.'
+    page_title = 'Places you know are AWFUL.'
     au = get_authenticated_user(request)
     perpage = 10
     rated = None
@@ -74,6 +74,8 @@ def view_ratings(request):
                 show = 'rated'
                 # This doesn't work if you explicitly ask for rated
                 no_unrated = True
+            else:
+                page_title = 'Places that might be AWFUL.'
 
         if show == 'rated':
            q = DBSession.query(Rating)

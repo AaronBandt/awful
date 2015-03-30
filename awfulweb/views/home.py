@@ -36,7 +36,7 @@ def _place_response(name, place_id, avg, pa):
 
 @view_config(route_name='home', permission='view', renderer='awfulweb:templates/home.pt')
 def view_home(request):
-    page_title = 'I ate lunch once. It was AWFUL.'
+    page_title = 'Become AWFUL.'
     au = get_authenticated_user(request)
     visit_threshold = int(request.registry.settings['awful.visit_threshold'])
     has_reviews = False
@@ -45,12 +45,23 @@ def view_home(request):
     places_response = []
     awfulites = []
 
+    try:
+        log.info('checking for ratings for user: %s' % au['login'])
+        q = DBSession.query(Rating).filter(Rating.updated_by==au['login'])
+        total = q.count()
+        if total:
+            has_reviews = True
+            page_title = "Go eat something AWFUL with these people"
+    except Exception, e:
+        conn_err_msg = e
+        return Response(str(conn_err_msg), content_type='text/plain', status_int=500)
 
     if 'whereto.submitted' in request.POST:
         awfulites = request.POST.getall('awfulite')
         # always include the logged in user
         awfulites.append(au['login'])
         display = True
+        page_title = "Go eat someplace AWFUL"
 
         print "Calculating places for these awfulites: ", awfulites
 
@@ -145,16 +156,6 @@ def view_home(request):
                 except Exception, e:
                     conn_err_msg = e
                     return Response(str(conn_err_msg), content_type='text/plain', status_int=500)
-
-    try:
-        log.info('checking for ratings for user: %s' % au['login'])
-        q = DBSession.query(Rating).filter(Rating.updated_by==au['login'])
-        total = q.count()
-        if total:
-            has_reviews = True
-    except Exception, e:
-        conn_err_msg = e
-        return Response(str(conn_err_msg), content_type='text/plain', status_int=500)
 
     q = DBSession.query(User).filter(~(User.user_name==au['login']))
     all_users = q.all()
