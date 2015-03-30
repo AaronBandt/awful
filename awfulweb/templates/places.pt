@@ -1,13 +1,15 @@
 <div metal:use-macro="layout">
     <div metal:fill-slot="content">
 
+      <script src="/static/jquery-2.1.3.min.js"></script>
       <script src="https://maps.googleapis.com/maps/api/js"></script>
       <script>
         // Ask for lat/lon and if we get it, insert it into the form.
         $(function() {
+
           // Disable the submit button until we're ready. Need it in
           // case user does regular page reload instead of shift +
-          $("#PlaceSearchBtn").prop('disabled', true);
+          $("#SearchBtn").prop('disabled',true);
           navigator.geolocation.getCurrentPosition(foundLocation, noLocation);
 
           function addHidden(theForm, key, value) {
@@ -27,8 +29,8 @@
             var long = position.coords.longitude;
             addHidden(theForm, 'home_lat', lat);
             addHidden(theForm, 'home_lon', long);
-            $("#PlaceSearchBtn").prop('value', 'MEH.');
-            $("#PlaceSearchBtn").prop('disabled', false);
+            $("#SearchBtn").prop('value', 'MEH.');
+            $("#SearchBtn").prop('disabled',false);
           }
           function noLocation()
           {
@@ -36,17 +38,19 @@
           }
         });
       </script>
+      <div>
+      </div>
 
       <div>
-          <form name="place_search" id="place" method="POST" action="/places">
+          <form name="place_search" id="place_search" method="POST" action="/places">
           <input type="hidden" name="place_search.submitted"/>
           <input type="text" name="name" placeholder="Search for a new AWFUL place."/>
-          <input id="PlaceSearchBtn" class="button" type="submit" name="submit" value="WAIT..." disabled="true"/>
+          <input id="SearchBtn" class="button" type="submit" name="search_submit" value="WAIT..."/>
           </form>
       </div>
 
       <div tal:condition="search">
-        <h2>Search Results (${result_count})</h2>
+        <h2 class="ul_light">Search Results (${result_count})</h2>
         <h3 tal:condition="not result_count">No Results Found</h3>
         <div class="search_results" tal:repeat="item search_results">
 

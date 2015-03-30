@@ -577,7 +577,7 @@ input.valid, textarea.valid{
 .search_results {
     width: 500px;
     height: 420px;
-    display: inline-block;
+    display: inline;
 }
 
 /* Pagination */
