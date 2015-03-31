@@ -45,6 +45,20 @@ def view_home(request):
     places_response = []
     awfulites = []
 
+    params = {'home_lat': None,
+              'home_lon': None,
+              'radius': request.registry.settings['awful.default_radius'],
+             }
+    for p in params:
+        try:
+            params[p] = request.params[p]
+        except:
+            pass
+
+    home_lat = params['home_lat']
+    home_lon = params['home_lon']
+    radius = params['radius']
+
     try:
         log.info('checking for ratings for user: %s' % au['login'])
         q = DBSession.query(Rating).filter(Rating.updated_by==au['login'])
@@ -159,6 +173,9 @@ def view_home(request):
 
     q = DBSession.query(User).filter(~(User.user_name==au['login']))
     all_users = q.all()
+    
+    if not home_lat:
+        page_title = 'Tracking your AWFUL position.'
 
     return {'layout': site_layout(),
             'page_title': page_title,
@@ -169,5 +186,8 @@ def view_home(request):
             'results': results,
             'places_response': places_response,
             'awfulites': awfulites,
+            'home_lat': home_lat,
+            'home_lon': home_lon,
+            'radius': radius,
            }
 

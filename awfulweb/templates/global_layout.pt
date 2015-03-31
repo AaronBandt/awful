@@ -24,16 +24,16 @@
         </div>
         <div class="nav_bar">
             <span>
-              <a class="nav" href="/">HOME</a>
+              <a class="nav" href="/?home_lat=${home_lat}&home_lon=${home_lon}&radius=${radius}">HOME</a>
             </span>
             <span>
-              <a class="nav" href="/ratings">RATINGS</a>
+              <a class="nav" href="/ratings?home_lat=${home_lat}&home_lon=${home_lon}&radius=${radius}">RATINGS</a>
             </span>
             <span>
-              <a class="nav" href="/places">PLACES</a>
+              <a class="nav" href="/places?home_lat=${home_lat}&home_lon=${home_lon}&radius=${radius}">PLACES</a>
             </span>
             <span>
-              <a class="nav" href="/help">HELP</a>
+              <a class="nav" href="/help?home_lat=${home_lat}&home_lon=${home_lon}&radius=${radius}">HELP</a>
             </span>
             <span class="nav right">
               <ul class="user">

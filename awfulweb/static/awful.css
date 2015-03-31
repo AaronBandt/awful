@@ -638,8 +638,7 @@ input.valid, textarea.valid{
     background: #CCCCCC;
 }
 
-
-/* Testing */
+/* Nav Body */
 h1.nav_body {
     display: inline;
 }
@@ -667,9 +666,26 @@ ul.nav_body {
    border-bottom: 1px #000 solid;
 }
 
+.inline {
+    display: inline;
+}
+
 /* whereto */
 #whereto_submit {
-   margin-top: 5px;
-   padding-top: 10px;
-   border-top: 1px #000 solid;
+    margin-top: 5px;
+    padding-top: 10px;
+    border-top: 1px #000 solid;
+}
+
+/* generic reults */
+ul.gen_res {
+    margin: 0;
+    padding-left: 0;
+    padding-bottom: 15px;
+    list-style-type: none;
+}
+
+.gen_res li {
+    list-style:none;
+    padding-left:0;
 }

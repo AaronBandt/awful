@@ -57,28 +57,44 @@ def _cs_api_query(req):
                       % (r.status_code, r.reason, api_url))
         return None
 
-def get_nearby(request):
+
+def get_nearby(request, **kwargs):
 
     geo_places_ids = []
+    # lat/lon/radius passed in
+    if 'home_lat' in kwargs.keys():
+        home_lat = float(kwargs['home_lat'])
+        home_lon = float(kwargs['home_lon'])
+        radius = float(kwargs['radius'])
+        log.info("get_nearby got lat: %s lon: %s radius: %s from passed parameter" % (home_lat,home_lon,radius))
+    else:
+        # get these settings from the request or fallback to config defaults
+        try:
+            try:
+                home_lat = float(request.GET['home_lat'])
+                home_lon = float(request.GET['home_lon'])
+                log.info("get_nearby got lat: %s lon: %s from browser GET" % (home_lat,home_lon))
+            except:
+                home_lat = float(request.POST['home_lat'])
+                home_lon = float(request.POST['home_lon'])
+                log.info("get_nearby got lat: %s lon: %s from browser POST" % (home_lat,home_lon))
+        except:
+            home_lat = float(request.registry.settings['awful.default_lat'])
+            home_lon = float(request.registry.settings['awful.default_lon'])
+            log.info("get_nearby using default lat: %s lon: %s" % (home_lat,home_lon))
+            pass
 
-    # get these settings from the request or fallback to config defaults
-    try:
-        home_lat = float(request.POST['home_lat'])
-        home_lon = float(request.POST['home_lon'])
-        log.info("Got lat: %s lon: %s from browser" % (home_lat,home_lon))
-    except:
-        home_lat = float(request.registry.settings['awful.default_lat'])
-        home_lon = float(request.registry.settings['awful.default_lon'])
-        log.info("Using default lat: %s lon: %s" % (home_lat,home_lon))
-        pass
-
-    try:
-        radius = float(request.POST['radius'])
-        log.info("Got radius: %s from browser" % (radius))
-    except:
-        radius = float(request.registry.settings['awful.default_radius'])
-        log.info("Using default radius: %s" % (radius))
-        pass
+        try:
+            try:
+                radius = float(request.GET['radius'])
+                log.info("get_nearby got radius: %s from browser GET" % (radius))
+            except:
+                radius = float(request.POST['radius'])
+                log.info("get_nearby got radius: %s from browser POST" % (radius))
+        except:
+            radius = float(request.registry.settings['awful.default_radius'])
+            log.info("get_nearby using default radius: %s" % (radius))
+            pass
 
     # Find everything that's close
     query = """
@@ -101,9 +117,16 @@ def get_nearby(request):
     q = DBSession.query(Place).filter(Place.cs_id.in_(geo_places_ids))
     places = q.all()
     for p in places:
-        log.info("Found place: %s CS_ID: %s" % (p.name, p.cs_id))
+        log.debug("Found place: %s CS_ID: %s" % (p.name, p.cs_id))
 
     return places
+
+
+def contains(list, filter):
+    for x in list:
+        if filter(x):
+            return True
+    return False
 
 
 def site_layout():
