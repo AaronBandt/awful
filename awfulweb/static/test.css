@@ -1,42 +1,322 @@
-#container{
-    width:400px;
-    height:50px;
-    position:relative;
+@import url(http://fonts.googleapis.com/css?family=Roboto);
+@import url(//fonts.googleapis.com/css?family=Inconsolata); /* Monospace */
+
+body {
+    font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    font-size: 80%;
+    color: #000000;
+    background: #FFFFFF;
 }
 
-#container .prevButton{
-    height:10px;
-    width:10px;
-    position:absolute;
-    cursor:pointer;
-    z-index:2000;
-    left:0
+/* Default link settings */
+a {
+    color: #08C;
+}
+a:link {
+    text-decoration: none;
+}
+a:visited {
+    color: #714a40;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
 }
 
-#container .nextButton{
-    height:10px;
-    width:10px;
-    position:absolute;
-    cursor:pointer;
-    z-index:2000;
-    right:0
+/* Default Table settings */
+th {
+    background: #08c;
+    color: #fff;
+    white-space: nowrap;
 }
 
-#container ul{
-    width:350px;
-    height:50px;
-    list-style:none outside none;
-    position:relative;
-    overflow:hidden;
+td {
+    white-space: nowrap;
+    padding: 0px 10px;
 }
 
-#container li:first-child{
-    display:list-item;
-    position:absolute;
+.table_header {
+    padding: 5px 20px;
 }
 
-#container li{
-    position:absolute;
-    display:none;
+.tabs input[type=radio] {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
+.tabs {
+  width: 850px;
+  float: none;
+  list-style: none;
+  position: relative;
+  padding: 0;
+  margin: 25px auto;
+}
+.tabs li{
+  float: left;
+}
+.tabs label {
+    display: block;
+    padding: 10px 20px;
+    border-radius: 2px 2px 0 0;
+    color: #08C;
+    font-size: 16px;
+    font-weight: normal;
+    background: rgba(255,255,255,0.2);
+    cursor: pointer;
+    position: relative;
+    top: 3px;
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+}
+.tabs label:hover {
+  background: rgba(0, 136, 204,0.5);
+  top: 0;
+}
+ 
+[id^=tab]:checked + label {
+  background: #08C;
+  color: white;
+  top: 0;
+}
+ 
+[id^=tab]:checked ~ [id^=tab-content] {
+    display: block;
+}
+.tab-content{
+  z-index: 2;
+  display: none;
+  text-align: left;
+  width: 100%;
+  font-size: 20px;
+  line-height: 140%;
+  padding-top: 10px;
+  background: #f8f8f8;
+  border-top: thin solid #08C;
+  padding: 15px;
+  color: #000;
+  position: absolute;
+  top: 39px;
+  left: 0;
+  box-sizing: border-box;
+  -webkit-animation-duration: 0.5s;
+  -o-animation-duration: 0.5s;
+  -moz-animation-duration: 0.5s;
+  animation-duration: 0.5s;
 }
 
+nav {
+  width: 250px;
+  height: 100%;
+  float:left;
+  display:inline;
+  padding-right: 20px;
+  border-right: thin solid #777;
+}
+
+section#main{
+  float: left;
+  margin: 0;
+  padding: 0;
+  display: inline;     
+}
+
+#title {
+  margin-left: 325px;
+}
+
+#search_results {
+    border-bottom: 1px solid #777;
+    padding-left: 25px;
+}
+
+/* nav */
+.accordion{
+    width: 250px;
+    margin: 10px auto;
+}
+.accordion label{
+    padding: 5px 15px;
+    position: relative;
+    display: block;
+    height: 30px;
+    cursor: pointer;
+    color: #08C;
+    line-height: 33px;
+    font-size: 19px;
+    background: #EFEFEF;
+    border: 1px solid #fff;
+}
+.accordion label:hover{
+    background: rgba(0, 136, 204,0.5);
+    color: #fff;
+}
+.accordion input + label {
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+.accordion input:checked + label,
+.accordion input:checked + label:hover{
+    background: #08C;
+    color: #fff;
+}
+.accordion input{
+    display: none;
+}
+.accordion .article{
+    background: rgb(255, 255, 255);
+    overflow: hidden;
+    height: 0px;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+.accordion .article p{
+    padding-left: 20px;
+}
+.accordion input:checked ~ .article{
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+
+/* the numbers here refer to the number if items inside each menu box */
+.accordion input:checked ~ .article.ac-two{
+    height: 65px;
+}
+.accordion input:checked ~ .article.ac-three{
+    height: 85px;
+}
+.accordion input:checked ~ .article.ac-four{
+    height: 105px;
+}
+.accordion input:checked ~ .article.ac-five{
+    height: 120px;
+}
+.accordion input:checked ~ .article.ac-six{
+    height: 135px;
+}
+.accordion input:checked ~ .article.ac-seven{
+    height: 155px;
+}
+
+/*##### the dragtable stuff #####*/
+.dragtable-sortable { 
+    list-style-type: none; margin: 0; padding: 0; -moz-user-select: none;
+}
+.dragtable-sortable li {
+    margin: 0; padding: 0; float: left; font-size: 1em; background: white; 
+}
+
+.dragtable-sortable th, .dragtable-sortable td{
+    border-left: 0px;
+}
+
+.dragtable-sortable li:first-child th, .dragtable-sortable li:first-child td {
+    border-left: 1px solid #CCC; 
+}
+
+.ui-sortable-helper {
+    opacity: 0.7;filter: alpha(opacity=70);
+}
+.ui-sortable-placeholder { 
+    -moz-box-shadow: 4px 5px 4px #C6C6C6 inset;
+    -webkit-box-shadow: 4px 5px 4px #C6C6C6 inset;
+    box-shadow: 4px 5px 4px #C6C6C6 inset;
+    border-bottom: 1px solid #CCCCCC;
+    border-top: 1px solid #CCCCCC;
+    visibility: visible !important;
+    background: #EFEFEF !important; 
+    visibility: visible !important;
+}
+.ui-sortable-placeholder * { 
+    opacity: 0.0; visibility: hidden; 
+}
+
+
+table.sar-table th {
+    background:none repeat scroll 0 0 #08C;
+    color:#000;
+    font-weight:normal;
+    height:20px;
+    width:100px;
+    cursor:move;
+}
+
+#localStorageTable th {
+    cursor:default;
+}
+
+.some-handle {
+    cursor:move;
+}
+
+/*
+.some-handle {
+    float:left;
+    background-image:url("/static/handle.png");
+    background-repeat:repeat-y;
+    height:18px;
+    margin:0 1px;
+}
+*/
+
+.some-handle {
+    position: absolute;
+    z-index: 1000;
+    height:21px;
+    width:8px;
+    margin:-1;
+    background: #ccc;
+}
+
+
+/* table sorting theme */
+
+table.tablesorter {
+    margin:10px 0pt 15px;
+    font-size: 10pt;
+    width: 100%;
+    text-align: left;
+}
+table.tablesorter thead tr th, table.tablesorter tfoot tr th {
+    background-color: #e6e6e6;
+    font-size: 12pt;
+}
+table.tablesorter thead tr .header {
+    background-image: url(bg.gif);
+    background-repeat: no-repeat;
+    background-position: center right;
+    cursor: pointer;
+}
+table.tablesorter tbody td {
+    color: #08C;
+    background-color: #FFF;
+    vertical-align: top;
+}
+table.tablesorter tbody tr.odd td {
+    background-color:#08C;
+}
+table.tablesorter thead tr .headerSortUp {
+    background-image: url(asc.gif);
+}
+table.tablesorter thead tr .headerSortDown {
+    background-image: url(desc.gif);
+}
+table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
+background-color: #08C;
+}
+
+.hidden {
+display: none;
+}

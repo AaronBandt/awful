@@ -1,51 +1,287 @@
+<!--
 <div metal:use-macro="layout">
     <div metal:fill-slot="content">
 
+-->
 
-<!--
 <html lang="en-US"
       xmlns="http://www.w3.org/1999/xhtml">
   <head profile="http://www.w3.org/2005/10/profile">
-    <title>test</title>
-    <link href="/static/awful.css" rel="stylesheet" type="text/css" />
+    <title>Arsenal</title>
+    <link href="/static/test.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
--->
 
-      <div>
-        <ul class="test">
-          <li>
- <h1 class="test">Testing</h1>
-        <div id="pag_container">
-          <div tal:attributes="class 'pag_buttons'">
-            <a tal:attributes="href '/test'"><img src='/static/nav-le.gif' border='0'></a>
-          </div>
-          <div tal:attributes="class 'pag_buttons'">
-            <a tal:attributes="href '/test'"><img src='/static/nav-l.gif' border='0'></a>
-          </div>
-          <div class="pag_content">
-            <span>
-              1-10 of 123
-            </span>
-          </div>
-          <div tal:attributes="class 'pag_buttons'">
-            <a tal:attributes="href '/test'"><img src='/static/nav-r.gif' border='0'></a>
-          </div>
-          <div tal:attributes="class 'pag_buttons'">
-            <a tal:attributes="href '/test'"><img src='/static/nav-re.gif' border='0'></a>
-          </div>
-        </div>
-          </li>
-        </ul>
+    <script src="/static/jquery-2.1.3.min.js"></script>
+    <script src="/static/jquery-ui.min.js"></script>
+    <script src="/static/jquery.dragtable.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("#localStorageTable").tablesorter({
+        // set forced sort on the fourth column and i decending order.
+        sortList: [[0,0]]
+    });
+    $('#localStorageTable').dragtable({
+        maxMovingRows:1,
+        dragHandle:'.some-handle',
+        persistState: function(table) {
+          if (!window.sessionStorage) return;
+          var ss = window.sessionStorage;
+          table.el.find('th').each(function(i) {
+            if(this.id != '') {table.sortOrder[this.id]=i;}
+          });
+          ss.setItem('tableorder',JSON.stringify(table.sortOrder));
+        },
+        restoreState: eval('(' + window.sessionStorage.getItem('tableorder') + ')')
+    });
+  });
+</script>
 
-      </div>
-<!--
+    <script src="/static/jquery.tablesorter.min.js"></script>
+
+<div>
+<img src="/static/al.png">
+</div>
+
+
+<nav>
+            <div class="accordion">
+                <div>
+                    <input id="ac-1" name="accordion-1" type="checkbox" />
+                    <label for="ac-1">Manage</label>
+                    <div class="article ac-two">
+                      <p>
+                        <a href="/datacenters">datacenters</a><br>
+                        <a href="/nodes">nodes</a>
+                      </p>
+                    </div>
+                </div>
+                <div>
+                    <input id="ac-2" name="accordion-1" type="checkbox" />
+                    <label for="ac-2">Groups</label>
+                    <div class="article ac-five">
+                      <p>
+                        <a href="/tags">tags</a><br>
+                        <a href="/graffitis">graffitis</a><br>
+                        <a href="/node_groups">node groups</a><br>
+                        <a href="/services">services</a><br>
+                        <a href="/load_balancer_pools">load balancer pools</a>
+                      </p>
+                    </div>
+                </div>
+                <div>
+                    <input id="ac-3" name="accordion-1" type="checkbox" />
+                    <label for="ac-3">Network</label>
+                    <div class="article ac-four">
+                      <p>
+                        <a href="/vips">VIPs</a><br>
+                        <a href="/ip_addresses">IP addresses</a><br>
+                        <a href="/network_ports">network ports</a><br>
+                        <a href="/subnets">subnets</a>
+                      </p>
+                    </div>
+                </div>
+                <div>
+                    <input id="ac-4" name="accordion-1" type="checkbox" />
+                    <label for="ac-4">Storage</label>
+                    <div class="article ac-three">
+                      <p>
+                        <a href="/drives">drives</a><br>
+                        <a href="/volues">volumes</a><br>
+                        <a href="/storage_controllers">storage controllers</a>
+                      </p>
+                    </div>
+                </div>
+                <div>
+                    <input id="ac-5" name="accordion-1" type="checkbox" />
+                    <label for="ac-5">Meta</label>
+                    <div class="article ac-five">
+                      <p>
+                        <a href="/hardware_profiles">hardware profiles</a><br>
+                        <a href="/operating_systems">operating systems</a><br>
+                        <a href="/statuses">statuses</a><br>
+                        <a href="/racks">racks</a><br>
+                        <a href="/outlets">outlets</a>
+                      </p>
+                    </div>
+                </div>
+                <div>
+                    <input id="ac-6" name="accordion-1" type="checkbox" />
+                    <label for="ac-6">Admin</label>
+                    <div class="article ac-three">
+                      <p>
+                        <a href="/accounts">accounts</a><br>
+                        <a href="/account_groups">account groups</a><br>
+                        <a href="/audits">audits</a>
+                      </p>
+                    </div>
+                </div>
+            </div>
+
+</nav>
+
+<section id="main">
+
+<div id="search_results">
+
+      <table id="localStorageTable" class="sar-table tablesorter">
+        <thead>
+          <tr>
+            <th id="sr_node_name"><div class="some-handle"></div><span class="table_header">Node Name</span></th>
+            <th id="sr_uniq_id"><div class="some-handle"></div><span class="table_header">Unique ID</span></th>
+            <th id="sr_status"><div class="some-handle"></div><span class="table_header">Status</span></th>
+            <th id="sr_last_update"><div class="some-handle"></div><span class="table_header">Last Update</span></th>
+            <th id="sr_node_groups"><div class="some-handle"></div><span class="table_header">node groups</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>vir1prdpaw1.prod.cs</td>
+            <td>6A:37:2A:68:E1:B0</td>
+            <td>inservice</td>
+            <td>Wed Apr 15 09:19:58 -0700 2015</td>
+            <td>default_install, paw</td>
+          </tr>
+          <tr>
+            <td>aws1prdtcw1.opsprod.ctgrd.com</td>
+            <td>i-303a6c4a</td>
+            <td>inservice</td>
+            <td>Thu Apr 16 09:19:58 -0700 2015</td>
+            <td>default_install, tcw</td>
+          </tr>
+          <tr>
+            <td>aws1devcpd1.csqa.ctgrd.com</td>
+            <td>aws1devcpd1.cltftmkcg4dd.us-east-1.rds.amazonaws.com</td>
+            <td>inservice</td>
+            <td>Wed Apr 15 09:19:58 -0700 2015</td>
+            <td>None</td>
+          </tr>
+        </tbody>
+      </table>
+
+
+</div>
+
+<div id="main">
+<div id="title">
+<h1>${host} </h1>
+</div>
+<ul class="tabs">
+        <li>
+          <input type="radio" checked name="tabs" id="tab1">
+          <label for="tab1">Node</label>
+          <div id="tab-content1" class="tab-content">
+            Host name: ${host} <br>
+            Unique ID: ${uniq_id}<br>
+            Status: inservice<br>
+            Uptime: 76 days<br>
+            Created At: Fri Sep 14 14:47:42 -0700 2012<br>
+            Updated At: Wed Apr 15 09:19:58 -0700 2015<br>
+          </div>
+        </li>
+        <li tal:condition="(not type == 'rds')">
+          <input type="radio" name="tabs" id="tab2">
+          <label for="tab2">Node Groups</label>
+          <div id="tab-content2" class="tab-content">
+            default_install<br>
+            ${ng}<br>
+          </div>
+        </li>
+        <li tal:condition="type == 'ec2'">
+          <input type="radio" name="tabs" id="tab3">
+          <label for="tab3">EC2</label>
+          <div id="tab-content3" class="tab-content">
+            Ec2 Instance: i-303a6c4a<br>
+            Ec2 Ami: ami-793f9410<br>
+            Ec2 Instance Type: m1.medium<br>
+            Ec2 Security Groups: prdtcw<br>
+            Ec2 Private Hostname: ip-10-72-254-115.ec2.internal<br>
+            Ec2 Public Hostname: ec2-184-72-210-48.compute-1.amazonaws.com<br>
+            Ec2 Placement Availability Zone: us-east-1d<br>
+          </div>
+        </li>
+        <li tal:condition="type == 'rds'">
+          <input type="radio" name="tabs" id="tab3">
+          <label for="tab3">RDS</label>
+          <div id="tab-content3" class="tab-content">
+            tab 2 content
+          </div>
+        </li>
+        <li tal:condition="(not (type == 'ec2' or type == 'rds'))">
+          <input type="radio" name="tabs" id="tab3">
+          <label for="tab3">Hardware</label>
+          <div id="tab-content3" class="tab-content">
+             Diskspace Used: 4873 MB (25%)<br>
+             Diskspace Avail : 14261 MB (74%)<br>
+             (Disk space info only reflects "/" and "/home")<br>
+             Serial Number:<br>
+             Asset Tag:<br>
+             Processor Manufacturer: Intel<br>
+             Processor Model: Xeon(R) CPU E5507<br>
+             Processor Speed: 2.27GHz<br>
+             Processor Socket Count:<br>
+             Processor Count: 1<br>
+             Processor Core Count: 0<br>
+             Os Processor Count: 1<br>
+             Os Virtual Processor Count:<br>
+             Physical Memory:<br>
+             Physical Memory Sizes:<br>
+             Os Memory: 3.67 GB<br>
+             Swap: 0.00 MB<br>
+             Power Supply Count:<br>
+             Console Type: <br>
+          </div>
+        </li>
+        <li tal:condition="(not (type == 'ec2' or type == 'rds'))">
+          <input type="radio" name="tabs" id="tab4">
+          <label for="tab4">Tags</label>
+          <div id="tab-content4" class="tab-content">
+            BusinessUnit: CityGrid<br>
+            Team: Operations<br>
+            Env: qat<br>
+            Project: Something<br>
+            Component: centos7 testing<br>
+          </div>
+        </li>
+        <li>
+          <input type="radio" name="tabs" id="tab5">
+          <label for="tab5">Software</label>
+          <div id="tab-content5" class="tab-content">
+            Operating System: CentOS (Final) 6.2 x86_64<br>
+            Preferred Operating System:<br>
+            Kernel Version: 2.6.32-220.el6.x86_64<br>
+          </div>
+        </li>
+        <li>
+          <input type="radio" name="tabs" id="tab6">
+          <label for="tab6">Network</label>
+          <div id="tab-content6" class="tab-content">
+            tab 3 content<br>
+          </div>
+        </li>
+        <li>
+          <input type="radio" name="tabs" id="tab7">
+          <label for="tab7">Virtualization</label>
+          <div id="tab-content7" class="tab-content">
+            Virtual Architecture: Xen<br>
+            Virtual Mode: Guest<br>
+            Virtual Host: ${vhost}<br>
+            VM Image Size: 0 MB<br>
+            VM Space Used: 0 MB<br>
+          </div>
+        </li>
+</ul>
+</div>
+
+</section>
+
   </body>
 </html>
--->
 
 
+<!--
   </div>
 </div>
+-->
 
 
