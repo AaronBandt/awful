@@ -9,6 +9,9 @@ body {
     background: #FFFFFF;
 }
 
+.mono {
+    font-family: "Inconsolata", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
 /* Default link settings */
 a {
     color: #08C;
