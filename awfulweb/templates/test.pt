@@ -15,265 +15,253 @@
     <script src="/static/jquery-2.1.3.min.js"></script>
     <script src="/static/jquery-ui.min.js"></script>
     <script src="/static/jquery.dragtable.js"></script>
-<script type="text/javascript">
-  $(document).ready(function() {
-    $("#localStorageTable").tablesorter({
-        // set forced sort on the fourth column and i decending order.
-        sortList: [[0,0]]
-    });
-    $('#localStorageTable').dragtable({
-        maxMovingRows:1,
-        dragHandle:'.some-handle',
-        persistState: function(table) {
-          if (!window.sessionStorage) return;
-          var ss = window.sessionStorage;
-          table.el.find('th').each(function(i) {
-            if(this.id != '') {table.sortOrder[this.id]=i;}
-          });
-          ss.setItem('tableorder',JSON.stringify(table.sortOrder));
-        },
-        restoreState: eval('(' + window.sessionStorage.getItem('tableorder') + ')')
-    });
-  });
-</script>
+    <script type="text/javascript">
+      $(document).ready(function() {
 
+        $('#menu_btn_container').click(function(){
+          $('#menu').toggle("slow");
+        });
+
+
+        $("#searchResultsTable").tablesorter({
+            // set forced sort on the fourth column and i decending order.
+            sortList: [[0,0]]
+        });
+        $('#searchResultsTable').dragtable({
+            maxMovingRows:1,
+            dragHandle:'.drag-handle',
+            persistState: function(table) {
+              if (!window.sessionStorage) return;
+              var ss = window.sessionStorage;
+              table.el.find('th').each(function(i) {
+                if(this.id != '') {table.sortOrder[this.id]=i;}
+              });
+              ss.setItem('tableorder',JSON.stringify(table.sortOrder));
+            },
+            restoreState: eval('(' + window.sessionStorage.getItem('tableorder') + ')')
+        });
+      });
+    </script>
     <script src="/static/jquery.tablesorter.min.js"></script>
 
-<div>
-<img src="/static/al.png">
-</div>
+  <div id='top'>
 
+    <div id='logo_container'>
+      <a href='#'><img src="/static/arsenal.png"></a>
+    </div>
+    <div id='menu_btn_container'>
+      <div id="menu_btn">Menu</div>
+    </div>
 
-<nav>
-            <div class="accordion">
-                <div>
-                    <input id="ac-1" name="accordion-1" type="checkbox" />
-                    <label for="ac-1">Manage</label>
-                    <div class="article ac-two">
-                      <p>
-                        <a href="/datacenters">datacenters</a><br>
-                        <a href="/nodes">nodes</a>
-                      </p>
-                    </div>
-                </div>
-                <div>
-                    <input id="ac-2" name="accordion-1" type="checkbox" />
-                    <label for="ac-2">Groups</label>
-                    <div class="article ac-five">
-                      <p>
-                        <a href="/tags">tags</a><br>
-                        <a href="/graffitis">graffitis</a><br>
-                        <a href="/node_groups">node groups</a><br>
-                        <a href="/services">services</a><br>
-                        <a href="/load_balancer_pools">load balancer pools</a>
-                      </p>
-                    </div>
-                </div>
-                <div>
-                    <input id="ac-3" name="accordion-1" type="checkbox" />
-                    <label for="ac-3">Network</label>
-                    <div class="article ac-four">
-                      <p>
-                        <a href="/vips">VIPs</a><br>
-                        <a href="/ip_addresses">IP addresses</a><br>
-                        <a href="/network_ports">network ports</a><br>
-                        <a href="/subnets">subnets</a>
-                      </p>
-                    </div>
-                </div>
-                <div>
-                    <input id="ac-4" name="accordion-1" type="checkbox" />
-                    <label for="ac-4">Storage</label>
-                    <div class="article ac-three">
-                      <p>
-                        <a href="/drives">drives</a><br>
-                        <a href="/volues">volumes</a><br>
-                        <a href="/storage_controllers">storage controllers</a>
-                      </p>
-                    </div>
-                </div>
-                <div>
-                    <input id="ac-5" name="accordion-1" type="checkbox" />
-                    <label for="ac-5">Meta</label>
-                    <div class="article ac-five">
-                      <p>
-                        <a href="/hardware_profiles">hardware profiles</a><br>
-                        <a href="/operating_systems">operating systems</a><br>
-                        <a href="/statuses">statuses</a><br>
-                        <a href="/racks">racks</a><br>
-                        <a href="/outlets">outlets</a>
-                      </p>
-                    </div>
-                </div>
-                <div>
-                    <input id="ac-6" name="accordion-1" type="checkbox" />
-                    <label for="ac-6">Admin</label>
-                    <div class="article ac-three">
-                      <p>
-                        <a href="/accounts">accounts</a><br>
-                        <a href="/account_groups">account groups</a><br>
-                        <a href="/audits">audits</a>
-                      </p>
-                    </div>
-                </div>
-            </div>
+    <div id='search_container'>
+      <form>
+        <input type="text" class="search" placeholder="Search..." required>
+        <input type="button" class="button" value="Search">
+      </form>
+    </div>
 
-</nav>
-
-<section id="main">
-
-<div id="search_results">
-
-      <table id="localStorageTable" class="sar-table tablesorter">
-        <thead>
-          <tr>
-            <th id="sr_node_name"><div class="some-handle"></div><span class="table_header">Node Name</span></th>
-            <th id="sr_uniq_id"><div class="some-handle"></div><span class="table_header">Unique ID</span></th>
-            <th id="sr_status"><div class="some-handle"></div><span class="table_header">Status</span></th>
-            <th id="sr_last_update"><div class="some-handle"></div><span class="table_header">Last Update</span></th>
-            <th id="sr_node_groups"><div class="some-handle"></div><span class="table_header">node groups</span></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>vir1prdpaw1.prod.cs</td>
-            <td>6A:37:2A:68:E1:B0</td>
-            <td>inservice</td>
-            <td>Wed Apr 15 09:19:58 -0700 2015</td>
-            <td>default_install, paw</td>
-          </tr>
-          <tr>
-            <td>aws1prdtcw1.opsprod.ctgrd.com</td>
-            <td>i-303a6c4a</td>
-            <td>inservice</td>
-            <td>Thu Apr 16 09:19:58 -0700 2015</td>
-            <td>default_install, tcw</td>
-          </tr>
-          <tr>
-            <td>aws1devcpd1.csqa.ctgrd.com</td>
-            <td>aws1devcpd1.cltftmkcg4dd.us-east-1.rds.amazonaws.com</td>
-            <td>inservice</td>
-            <td>Wed Apr 15 09:19:58 -0700 2015</td>
-            <td>None</td>
-          </tr>
-        </tbody>
-      </table>
-
-
-</div>
+    <div id="menu" class="hidden">
+      <div class="menu_group">
+        <h3>Manage</h3>
+        <a href="/datacenters">datacenters</a><br>
+        <a href="/nodes">nodes</a>
+      </div>
+      <div class="menu_group">
+        <h3>Groups</h3>
+        <a href="/tags">tags</a><br>
+        <a href="/graffitis">graffitis</a><br>
+        <a href="/node_groups">node groups</a><br>
+        <a href="/services">services</a><br>
+        <a href="/load_balancer_pools">load balancer pools</a>
+      </div>
+      <div class="menu_group">
+        <h3>Network</h3>
+        <a href="/vips">VIPs</a><br>
+        <a href="/ip_addresses">IP addresses</a><br>
+        <a href="/network_ports">network ports</a><br>
+        <a href="/subnets">subnets</a>
+      </div>
+      <div class="menu_group">
+        <h3>Storage</h3>
+        <a href="/drives">drives</a><br>
+        <a href="/volues">volumes</a><br>
+        <a href="/storage_controllers">storage controllers</a>
+      </div>
+      <div class="menu_group">
+        <h3>Meta</h3>
+        <a href="/hardware_profiles">hardware profiles</a><br>
+        <a href="/operating_systems">operating systems</a><br>
+        <a href="/statuses">statuses</a><br>
+        <a href="/racks">racks</a><br>
+        <a href="/outlets">outlets</a>
+      </div>
+      <div class="menu_group">
+        <h3>Admin</h3>
+        <a href="/accounts">accounts</a><br>
+        <a href="/account_groups">account groups</a><br>
+        <a href="/audits">audits</a>
+      </div>
+    </div>
+  </div>
 
 <div id="main">
-<div id="title">
-<h1>${host} </h1>
-</div>
-<ul class="tabs">
-        <li>
-          <input type="radio" checked name="tabs" id="tab1">
-          <label for="tab1">Node</label>
-          <div id="tab-content1" class="tab-content">
-            Host name: <span class="mono">${host}</span> <br>
-            Unique ID: <span class="mono">${uniq_id}</span><br>
-            Status: <span class="mono">inservice</span><br>
-            Uptime: <span class="mono">76 days</span><br>
-            Created At: <span class="mono">Fri Sep 14 14:47:42 -0700 2012</span><br>
-            Updated At: <span class="mono">Wed Apr 15 09:19:58 -0700 2015</span><br>
-          </div>
-        </li>
-        <li tal:condition="(not type == 'rds')">
-          <input type="radio" name="tabs" id="tab2">
-          <label for="tab2">Node Groups</label>
-          <div id="tab-content2" class="tab-content">
-            <span class="mono">default_install</span><br>
-            <span class="mono">${ng}</span><br>
-          </div>
-        </li>
-        <li tal:condition="type == 'ec2'">
-          <input type="radio" name="tabs" id="tab3">
-          <label for="tab3">EC2</label>
-          <div id="tab-content3" class="tab-content">
-            Ec2 Instance: <span class="mono">i-303a6c4a</span><br>
-            Ec2 Ami: <span class="mono">ami-793f9410</span><br>
-            Ec2 Instance Type: <span class="mono">m1.medium</span><br>
-            Ec2 Security Groups: <span class="mono">prdtcw</span><br>
-            Ec2 Private Hostname: <span class="mono">ip-10-72-254-115.ec2.internal</span><br>
-            Ec2 Public Hostname: <span class="mono">ec2-184-72-210-48.compute-1.amazonaws.com</span><br>
-            Ec2 Placement Availability Zone: <span class="mono">us-east-1d</span><br>
-          </div>
-        </li>
-        <li tal:condition="type == 'rds'">
-          <input type="radio" name="tabs" id="tab3">
-          <label for="tab3">RDS</label>
-          <div id="tab-content3" class="tab-content">
-            tab 2 content
-          </div>
-        </li>
-        <li tal:condition="(not (type == 'ec2' or type == 'rds'))">
-          <input type="radio" name="tabs" id="tab3">
-          <label for="tab3">Hardware</label>
-          <div id="tab-content3" class="tab-content">
-             Diskspace Used: <span class="mono">4873 MB (25%)</span><br>
-             Diskspace Avail : <span class="mono">14261 MB (74%)</span><br>
-             (Disk space info only reflects "/" and "/home")<br>
-             Serial Number:<br>
-             Asset Tag:<br>
-             Processor Manufacturer: <span class="mono">Intel</span><br>
-             Processor Model: Xeon(R) <span class="mono">CPU E5507</span><br>
-             Processor Speed: <span class="mono">2.27GHz</span><br>
-             Processor Socket Count:<span class="mono"></span><br>
-             Processor Count: <span class="mono">1</span><br>
-             Processor Core Count: <span class="mono">0</span><br>
-             Os Processor Count: <span class="mono">1</span><br>
-             Os Virtual Processor Count:<br>
-             Physical Memory:<br>
-             Physical Memory Sizes:<br>
-             Os Memory: <span class="mono">3.67 GB</span><br>
-             Swap: <span class="mono">0.00 MB</span><br>
-             Power Supply Count:<br>
-             Console Type: <br>
-          </div>
-        </li>
-        <li tal:condition="(not (type == 'ec2' or type == 'rds'))">
-          <input type="radio" name="tabs" id="tab4">
-          <label for="tab4">Tags</label>
-          <div id="tab-content4" class="tab-content">
-            BusinessUnit: <span class="mono">CityGrid</span><br>
-            Team: <span class="mono">Operations</span><br>
-            Env: <span class="mono">qat</span><br>
-            Project: <span class="mono">Something</span><br>
-            Component: <span class="mono">centos7 testing</span><br>
-          </div>
-        </li>
-        <li>
-          <input type="radio" name="tabs" id="tab5">
-          <label for="tab5">Software</label>
-          <div id="tab-content5" class="tab-content">
-            Operating System: <span class="mono">CentOS (Final) 6.2 x86_64</span><br>
-            Preferred Operating System:<br>
-            Kernel Version: <span class="mono">2.6.32-220.el6.x86_64</span><br>
-          </div>
-        </li>
-        <li>
-          <input type="radio" name="tabs" id="tab6">
-          <label for="tab6">Network</label>
-          <div id="tab-content6" class="tab-content">
-            tab 3 content<br>
-          </div>
-        </li>
-        <li>
-          <input type="radio" name="tabs" id="tab7">
-          <label for="tab7">Virtualization</label>
-          <div id="tab-content7" class="tab-content">
-            Virtual Architecture: <span class="mono">Xen</span><br>
-            Virtual Mode: <span class="mono">Guest</span><br>
-            Virtual Host: <span class="mono">${vhost}</span><br>
-            VM Image Size: <span class="mono">0 MB</span><br>
-            VM Space Used: <span class="mono">0 MB</span><br>
-          </div>
-        </li>
-</ul>
-</div>
 
-</section>
+  <div id="search_results">
+
+    <h1>Search Results</h1>
+
+    <table id="searchResultsTable" class="sar-table tablesorter">
+      <thead>
+        <tr>
+          <th id="sr_node_name"><div class="drag-handle"></div><span class="table_header">Node Name</span></th>
+          <th id="sr_uniq_id"><div class="drag-handle"></div><span class="table_header">Unique ID</span></th>
+          <th id="sr_status"><div class="drag-handle"></div><span class="table_header">Status</span></th>
+          <th id="sr_last_update"><div class="drag-handle"></div><span class="table_header">Last Update</span></th>
+          <th id="sr_node_groups"><div class="drag-handle"></div><span class="table_header">node groups</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>vir1prdpaw1.prod.cs</td>
+          <td>6A:37:2A:68:E1:B0</td>
+          <td>inservice</td>
+          <td>Wed Apr 15 09:19:58 -0700 2015</td>
+          <td>default_install, paw</td>
+        </tr>
+        <tr>
+          <td>aws1prdtcw1.opsprod.ctgrd.com</td>
+          <td>i-303a6c4a</td>
+          <td>inservice</td>
+          <td>Thu Apr 16 09:19:58 -0700 2015</td>
+          <td>default_install, tcw</td>
+        </tr>
+        <tr>
+          <td>aws1devcpd1.csqa.ctgrd.com</td>
+          <td>aws1devcpd1.cltftmkcg4dd.us-east-1.rds.amazonaws.com</td>
+          <td>inservice</td>
+          <td>Wed Apr 15 09:19:58 -0700 2015</td>
+          <td>None</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  
+  <div id='singleton'>
+
+    <div id="title">
+    <h1>${host} </h1>
+    </div>
+
+    <ul class="tabs">
+      <li>
+        <input type="radio" checked name="tabs" id="tab1">
+        <label for="tab1">Node</label>
+        <div id="tab-content1" class="tab-content">
+          Host name: <span class="mono">${host}</span> <br>
+          Unique ID: <span class="mono">${uniq_id}</span><br>
+          Status: <span class="mono">inservice</span><br>
+          Uptime: <span class="mono">76 days</span><br>
+          Created At: <span class="mono">Fri Sep 14 14:47:42 -0700 2012</span><br>
+          Updated At: <span class="mono">Wed Apr 15 09:19:58 -0700 2015</span><br>
+        </div>
+      </li>
+      <li tal:condition="(not type == 'rds')">
+        <input type="radio" name="tabs" id="tab2">
+        <label for="tab2">Node Groups</label>
+        <div id="tab-content2" class="tab-content">
+          <span class="mono">default_install</span><br>
+          <span class="mono">${ng}</span><br>
+        </div>
+      </li>
+      <li tal:condition="type == 'ec2'">
+        <input type="radio" name="tabs" id="tab3">
+        <label for="tab3">EC2</label>
+        <div id="tab-content3" class="tab-content">
+          Ec2 Instance: <span class="mono">i-303a6c4a</span><br>
+          Ec2 Ami: <span class="mono">ami-793f9410</span><br>
+          Ec2 Instance Type: <span class="mono">m1.medium</span><br>
+          Ec2 Security Groups: <span class="mono">prdtcw</span><br>
+          Ec2 Private Hostname: <span class="mono">ip-10-72-254-115.ec2.internal</span><br>
+          Ec2 Public Hostname: <span class="mono">ec2-184-72-210-48.compute-1.amazonaws.com</span><br>
+          Ec2 Placement Availability Zone: <span class="mono">us-east-1d</span><br>
+        </div>
+      </li>
+      <li tal:condition="type == 'rds'">
+        <input type="radio" name="tabs" id="tab3">
+        <label for="tab3">RDS</label>
+        <div id="tab-content3" class="tab-content">
+          tab 2 content
+        </div>
+      </li>
+      <li tal:condition="(not (type == 'ec2' or type == 'rds'))">
+        <input type="radio" name="tabs" id="tab3">
+        <label for="tab3">Hardware</label>
+        <div id="tab-content3" class="tab-content">
+           Diskspace Used: <span class="mono">4873 MB (25%)</span><br>
+           Diskspace Avail : <span class="mono">14261 MB (74%)</span><br>
+           (Disk space info only reflects "/" and "/home")<br>
+           Serial Number:<br>
+           Asset Tag:<br>
+           Processor Manufacturer: <span class="mono">Intel</span><br>
+           Processor Model: Xeon(R) <span class="mono">CPU E5507</span><br>
+           Processor Speed: <span class="mono">2.27GHz</span><br>
+           Processor Socket Count:<span class="mono"></span><br>
+           Processor Count: <span class="mono">1</span><br>
+           Processor Core Count: <span class="mono">0</span><br>
+           Os Processor Count: <span class="mono">1</span><br>
+           Os Virtual Processor Count:<br>
+           Physical Memory:<br>
+           Physical Memory Sizes:<br>
+           Os Memory: <span class="mono">3.67 GB</span><br>
+           Swap: <span class="mono">0.00 MB</span><br>
+           Power Supply Count:<br>
+           Console Type: <br>
+        </div>
+      </li>
+      <li tal:condition="(not (type == 'ec2' or type == 'rds'))">
+        <input type="radio" name="tabs" id="tab4">
+        <label for="tab4">Tags</label>
+        <div id="tab-content4" class="tab-content">
+          BusinessUnit: <span class="mono">CityGrid</span><br>
+          Team: <span class="mono">Operations</span><br>
+          Env: <span class="mono">qat</span><br>
+          Project: <span class="mono">Something</span><br>
+          Component: <span class="mono">centos7 testing</span><br>
+        </div>
+      </li>
+      <li>
+        <input type="radio" name="tabs" id="tab5">
+        <label for="tab5">Software</label>
+        <div id="tab-content5" class="tab-content">
+          Operating System: <span class="mono">CentOS (Final) 6.2 x86_64</span><br>
+          Preferred Operating System:<br>
+          Kernel Version: <span class="mono">2.6.32-220.el6.x86_64</span><br>
+        </div>
+      </li>
+      <li>
+        <input type="radio" name="tabs" id="tab6">
+        <label for="tab6">Network</label>
+        <div id="tab-content6" class="tab-content">
+          tab 3 content<br>
+        </div>
+      </li>
+      <li>
+        <input type="radio" name="tabs" id="tab7">
+        <label for="tab7">Virtualization</label>
+        <div id="tab-content7" class="tab-content">
+          Virtual Architecture: <span class="mono">Xen</span><br>
+          Virtual Mode: <span class="mono">Guest</span><br>
+          Virtual Host: <span class="mono">${vhost}</span><br>
+          VM Image Size: <span class="mono">0 MB</span><br>
+          VM Space Used: <span class="mono">0 MB</span><br>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+</div>
 
   </body>
 </html>

@@ -9,9 +9,15 @@ body {
     background: #FFFFFF;
 }
 
+*{
+    margin: 0;
+    padding: 0;
+}
+
 .mono {
     font-family: "Inconsolata", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
 /* Default link settings */
 a {
     color: #08C;
@@ -38,6 +44,11 @@ td {
     white-space: nowrap;
     padding: 0px 10px;
 }
+tr:nth-child(even) {
+    background-color: #000000;
+}
+
+/* CSS Tabs */
 
 .table_header {
     padding: 5px 20px;
@@ -111,20 +122,14 @@ td {
   animation-duration: 0.5s;
 }
 
-nav {
-  width: 250px;
-  height: 100%;
-  float:left;
-  display:inline;
-  padding-right: 20px;
-  border-right: thin solid #777;
-}
-
-section#main{
-  float: left;
+#main {
   margin: 0;
   padding: 0;
-  display: inline;     
+}
+
+#singleton {
+  margin-top: 25px;
+  padding: 0;
 }
 
 #title {
@@ -133,87 +138,11 @@ section#main{
 
 #search_results {
     border-bottom: 1px solid #777;
+    padding-top: 25px;
     padding-left: 25px;
 }
 
-/* nav */
-.accordion{
-    width: 250px;
-    margin: 10px auto;
-}
-.accordion label{
-    padding: 5px 15px;
-    position: relative;
-    display: block;
-    height: 30px;
-    cursor: pointer;
-    color: #08C;
-    line-height: 33px;
-    font-size: 19px;
-    background: #EFEFEF;
-    border: 1px solid #fff;
-}
-.accordion label:hover{
-    background: rgba(0, 136, 204,0.5);
-    color: #fff;
-}
-.accordion input + label {
-    -webkit-transition: all 0.3s ease-in-out;
-    -moz-transition: all 0.3s ease-in-out;
-    -o-transition: all 0.3s ease-in-out;
-    -ms-transition: all 0.3s ease-in-out;
-    transition: all 0.3s ease-in-out;
-}
-.accordion input:checked + label,
-.accordion input:checked + label:hover{
-    background: #08C;
-    color: #fff;
-}
-.accordion input{
-    display: none;
-}
-.accordion .article{
-    background: rgb(255, 255, 255);
-    overflow: hidden;
-    height: 0px;
-    -webkit-transition: all 0.3s ease-in-out;
-    -moz-transition: all 0.3s ease-in-out;
-    -o-transition: all 0.3s ease-in-out;
-    -ms-transition: all 0.3s ease-in-out;
-    transition: all 0.3s ease-in-out;
-}
-.accordion .article p{
-    padding-left: 20px;
-}
-.accordion input:checked ~ .article{
-    -webkit-transition: all 0.5s ease-in-out;
-    -moz-transition: all 0.5s ease-in-out;
-    -o-transition: all 0.5s ease-in-out;
-    -ms-transition: all 0.5s ease-in-out;
-    transition: all 0.5s ease-in-out;
-}
-
-/* the numbers here refer to the number if items inside each menu box */
-.accordion input:checked ~ .article.ac-two{
-    height: 65px;
-}
-.accordion input:checked ~ .article.ac-three{
-    height: 85px;
-}
-.accordion input:checked ~ .article.ac-four{
-    height: 105px;
-}
-.accordion input:checked ~ .article.ac-five{
-    height: 120px;
-}
-.accordion input:checked ~ .article.ac-six{
-    height: 135px;
-}
-.accordion input:checked ~ .article.ac-seven{
-    height: 155px;
-}
-
-/*##### the dragtable stuff #####*/
+/* dragtable */
 .dragtable-sortable { 
     list-style-type: none; margin: 0; padding: 0; -moz-user-select: none;
 }
@@ -256,36 +185,24 @@ table.sar-table th {
     cursor:move;
 }
 
-#localStorageTable th {
+#searchResultsTable th {
     cursor:default;
 }
 
-.some-handle {
+.drag-handle {
     cursor:move;
 }
 
-/*
-.some-handle {
-    float:left;
-    background-image:url("/static/handle.png");
-    background-repeat:repeat-y;
-    height:18px;
-    margin:0 1px;
-}
-*/
-
-.some-handle {
+.drag-handle {
     position: absolute;
-    z-index: 1000;
+    z-index: 1;
     height:21px;
     width:8px;
     margin:-1;
     background: #ccc;
 }
 
-
 /* table sorting theme */
-
 table.tablesorter {
     margin:10px 0pt 15px;
     font-size: 10pt;
@@ -321,5 +238,95 @@ background-color: #08C;
 }
 
 .hidden {
-display: none;
+  display: none;
+}
+
+
+/* top nav */
+#top {
+  top: 0px;
+  left: 0px;
+  padding: 10px 0px 0px 15px;
+  line-height: 1;
+  background: #141414;
+  background: -moz-linear-gradient(top, #333333 0%, #141414 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #333333), color-stop(100%, #141414));
+  background: -webkit-linear-gradient(top, #333333 0%, #141414 100%);
+  background: -o-linear-gradient(top, #333333 0%, #141414 100%);
+  background: -ms-linear-gradient(top, #333333 0%, #141414 100%);
+  background: linear-gradient(to bottom, #333333 0%, #141414 100%);
+  border-bottom: 2px solid #0fa1e0;
+  width: auto;
+  min-width: 800px;
+}
+
+#logo_container {
+  display: inline-block;
+}
+
+#menu_btn_container {
+  width: 75px;
+  height: 25px;
+  background: #08c;
+  display: inline-block;
+  margin-left: 50px
+  padding: 10px 20px;
+  border-radius: 2px 2px 0 0;
+  color: #fff;
+  font-size: 16px;
+  font-weight: normal;
+  cursor: pointer;
+  position: relative;
+  top: 3px;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+
+#menu_btn_container:hover {
+  background: #ccc;
+  top: 0;
+}
+
+#menu_btn {
+  display: table;
+  margin: 0 auto;
+}
+
+#menu {
+  background: #fff;
+  border-top: 2px solid #0fa1e0;
+  z-index: 9999;
+}
+
+.menu_group {
+  padding: 10px 20px;
+  display: inline-block;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+/* search box */
+#search_container {
+  float: right;
+  margin-top:10px;
+}
+.search {
+  width:300px;
+  padding:8px 15px;
+  background: #fff;
+  border:0px solid #08c;
+}
+.button {
+  position:relative;
+  padding:6px 15px;
+  left:-8px;
+  border:2px solid #207cca;
+  background-color:#207cca;
+  color:#fafafa;
+}
+.button:hover  {
+  border:2px solid #fff;
+  cursor:pointer;
 }
