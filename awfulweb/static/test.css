@@ -1,6 +1,14 @@
 @import url(http://fonts.googleapis.com/css?family=Roboto);
 @import url(//fonts.googleapis.com/css?family=Inconsolata); /* Monospace */
 
+/*
+Dark to light
+466289
+627894
+a0aec1
+dbe8f9
+*/
+
 body {
     font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 300;
@@ -18,35 +26,54 @@ body {
     font-family: "Inconsolata", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+.hidden {
+  display: none;
+}
+
 /* Default link settings */
 a {
-    color: #08C;
+  color: #466289;
 }
 a:link {
-    text-decoration: none;
+  text-decoration: none;
 }
 a:visited {
-    color: #714a40;
-    text-decoration: none;
+  color: #714a40;
+  text-decoration: none;
 }
 a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 /* Default Table settings */
+table {
+  border-collapse:collapse;
+}
+
 th {
-    background: #08c;
-    color: #fff;
-    white-space: nowrap;
+  background: #466289;
+  color: #fff;
+  white-space: nowrap;
 }
 
 td {
-    white-space: nowrap;
-    padding: 0px 10px;
+  border-bottom: 1px solid #CCCCCC;
 }
+
+tbody tr:last-child td {
+  border: none;
+}
+
+td {
+  white-space: nowrap;
+  padding: 0px 15px;
+}
+
+/*
 tr:nth-child(even) {
-    background-color: #000000;
+    background-color: #e6e6e6;
 }
+*/
 
 /* CSS Tabs */
 
@@ -74,7 +101,7 @@ tr:nth-child(even) {
     display: block;
     padding: 10px 20px;
     border-radius: 2px 2px 0 0;
-    color: #08C;
+    color: #466289;
     font-size: 16px;
     font-weight: normal;
     background: rgba(255,255,255,0.2);
@@ -87,12 +114,12 @@ tr:nth-child(even) {
     transition: all 0.2s ease-in-out;
 }
 .tabs label:hover {
-  background: rgba(0, 136, 204,0.5);
+  background: rgba(70, 98, 137,0.5);
   top: 0;
 }
  
 [id^=tab]:checked + label {
-  background: #08C;
+  background: #466289;
   color: white;
   top: 0;
 }
@@ -109,7 +136,7 @@ tr:nth-child(even) {
   line-height: 140%;
   padding-top: 10px;
   background: #f8f8f8;
-  border-top: thin solid #08C;
+  border-top: thin solid #466289;
   padding: 15px;
   color: #000;
   position: absolute;
@@ -130,16 +157,33 @@ tr:nth-child(even) {
 #singleton {
   margin-top: 25px;
   padding: 0;
+  clear: both;
 }
 
 #title {
-  margin-left: 325px;
+  display: table;
+  margin: 0 auto;
 }
 
 #search_results {
-    border-bottom: 1px solid #777;
-    padding-top: 25px;
-    padding-left: 25px;
+  display:inline-block;
+  padding-top: 25px;
+  padding-left: 25px;
+  width:auto;
+}
+
+#srf_container {
+  display:inline;
+}
+#srf {
+  width: 200px;
+  float:left;
+  background-color:#9C6; 
+}
+
+#btn_show_filters {
+  width: 70px;
+  background-color: #466289; 
 }
 
 /* dragtable */
@@ -160,6 +204,7 @@ tr:nth-child(even) {
 
 .ui-sortable-helper {
     opacity: 0.7;filter: alpha(opacity=70);
+    height: 20px;
 }
 .ui-sortable-placeholder { 
     -moz-box-shadow: 4px 5px 4px #C6C6C6 inset;
@@ -177,7 +222,7 @@ tr:nth-child(even) {
 
 
 table.sar-table th {
-    background:none repeat scroll 0 0 #08C;
+    background:none repeat scroll 0 0 #466289;
     color:#000;
     font-weight:normal;
     height:20px;
@@ -196,10 +241,13 @@ table.sar-table th {
 .drag-handle {
     position: absolute;
     z-index: 1;
-    height:21px;
+    height:20px;
     width:8px;
     margin:-1;
     background: #ccc;
+    background-image: url('/static/drag_handle.png');
+    background-repeat: no-repeat;
+    background-position: top left; 
 }
 
 /* table sorting theme */
@@ -220,12 +268,11 @@ table.tablesorter thead tr .header {
     cursor: pointer;
 }
 table.tablesorter tbody td {
-    color: #08C;
-    background-color: #FFF;
+    color: #466289;
     vertical-align: top;
 }
 table.tablesorter tbody tr.odd td {
-    background-color:#08C;
+    background-color: #a0aec1;
 }
 table.tablesorter thead tr .headerSortUp {
     background-image: url(asc.gif);
@@ -234,13 +281,8 @@ table.tablesorter thead tr .headerSortDown {
     background-image: url(desc.gif);
 }
 table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
-background-color: #08C;
+background-color: #466289;
 }
-
-.hidden {
-  display: none;
-}
-
 
 /* top nav */
 #top {
@@ -255,7 +297,7 @@ background-color: #08C;
   background: -o-linear-gradient(top, #333333 0%, #141414 100%);
   background: -ms-linear-gradient(top, #333333 0%, #141414 100%);
   background: linear-gradient(to bottom, #333333 0%, #141414 100%);
-  border-bottom: 2px solid #0fa1e0;
+  border-bottom: 2px solid #466289;
   width: auto;
   min-width: 800px;
 }
@@ -267,7 +309,7 @@ background-color: #08C;
 #menu_btn_container {
   width: 75px;
   height: 25px;
-  background: #08c;
+  background: #466289;
   display: inline-block;
   margin-left: 50px
   padding: 10px 20px;
@@ -292,11 +334,12 @@ background-color: #08C;
 #menu_btn {
   display: table;
   margin: 0 auto;
+  padding-top: 5px;
 }
 
 #menu {
   background: #fff;
-  border-top: 2px solid #0fa1e0;
+  border-top: 2px solid #466289;
   z-index: 9999;
 }
 
@@ -313,20 +356,134 @@ background-color: #08C;
   margin-top:10px;
 }
 .search {
-  width:300px;
-  padding:8px 15px;
+  width:400px;
+  padding:7px 15px;
   background: #fff;
-  border:0px solid #08c;
+  border:0px solid #466289;
 }
 .button {
   position:relative;
+  width: 85px;
   padding:6px 15px;
   left:-8px;
-  border:2px solid #207cca;
-  background-color:#207cca;
-  color:#fafafa;
+  border:none;
+  background: url("/static/mg.png") no-repeat scroll center center;
+  background-color:#466289;
+  border-top-right-radius:2px;
+  border-bottom-right-radius:2px;
 }
 .button:hover  {
-  border:2px solid #fff;
+  background-color:#627894;
   cursor:pointer;
 }
+
+/*select dropdown */
+#search_container select {
+  border: 0 !important;  /*Removes border*/
+  -webkit-appearance: none;  /*Removes default chrome and safari style*/
+  -moz-appearance: none; /* Removes Default Firefox style*/
+  background: #466289 url('/static/select-arrow.png') no-repeat 90% center;
+  width: 100px; /*Width of select dropdown to give space for arrow image*/
+  text-indent: 0.01px; /* Removes default arrow from firefox*/
+  text-overflow: "";  /*Removes default arrow from firefox*/ /*My custom style for fonts*/
+  color: #FFF;
+  border-top-left-radius:2px;
+  border-bottom-left-radius:2px; 
+  padding: 5px;
+}
+
+.dropcontainer {
+    position:relative;
+    font-size: 16px;
+    color: #777;
+    } 
+
+.trigger {
+    color: #777;
+    padding: 10px;
+    font-size: 16px;
+    width: 50%;
+    background: #fff url(../images/select-arrow-open.png) 98% center no-repeat;
+    display: block;
+    border: 1px solid #ccc;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease; 
+    transition: all 0.5s ease;
+    }
+
+.trigger:hover {
+    color: #777;
+    background: #f5f5f5 url(../images/select-arrow-open.png) 98% center no-repeat;
+    }
+
+.activetrigger {
+    color: #777;
+    padding: 10px;
+    font-size: 16px;
+    width: 50%;
+    background: #f5f5f5 url(../images/select-arrow-close.png) 98% center no-repeat;
+    display: block;
+    border: 1px solid #ccc;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    }
+
+.activetrigger:hover {
+    background: #f5f5f5 url(../images/select-arrow-close.png) 98% center no-repeat;
+    color: #777;
+    }
+
+.activetrigger:active {
+    background: #f5f5f5 url(../images/select-arrow-close.png) 98% center no-repeat;
+    color: #777;
+    }
+
+.dropcontainer ul {
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-top: none;
+    background: #fff;
+    list-style-type: none;
+    padding: 10px;
+    margin: 0;
+    width: 50%;
+    z-index: 100;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    }
+
+.dropcontainer ul li {
+    padding: 5px;
+    -webkit-transition: all 0.5s ease; 
+    -moz-transition: all 0.5s ease; 
+    -o-transition: all 0.5s ease; 
+    transition: all 0.5s ease;
+    }
+
+.dropcontainer ul li:hover {
+    background: #f5f5f5;
+    outline: none;
+    }
+
+.dropcontainer ul li:first-child {
+    display: none;
+    }
+
+.dropcontainer ul li:last-child {
+    border-bottom: none;
+    }
+
+.dropdownhidden {
+    display: none;
+    }
+
+.dropdownvisible {
+    height: auto;
+    }
+

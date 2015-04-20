@@ -206,7 +206,7 @@
           }
         }
         rowAttrsArr.push(attrsString);
-        heightArr.push($(this).height());
+        heightArr.push($('20').height());
       });
 
       // compute width, no special handling for ie needed :-)
