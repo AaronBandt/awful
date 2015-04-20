@@ -107,6 +107,9 @@
           <label for="user_${user.user_id}">${user.first_name} ${user.last_name}</label>
         </div>
         <div id="whereto_submit">
+          <input type="hidden" name="home_lat" value="${home_lat}"/>
+          <input type="hidden" name="home_lon" value="${home_lon}"/>
+          <input type="hidden" name="radius" value="${radius}"/>
           <input type="hidden" id="whereto_submitted" name="whereto.submitted"/>
           <input id="WhereToBtn" class="button" type="submit" name="whereto_submit" value="Where to?"/>
         </div>
@@ -124,6 +127,9 @@
                 <form name="lets_ride" id="lets_ride" method="POST" action="/">
                 <input type="hidden" name="lets_ride.submitted"/>
                 <input type="hidden" name="place_id" value="${item.place_id}">
+                <input type="hidden" name="home_lat" value="${home_lat}"/>
+                <input type="hidden" name="home_lon" value="${home_lon}"/>
+                <input type="hidden" name="radius" value="${radius}"/>
                 <input tal:repeat="a awfulites" type="hidden" name="awfulite" value="${a}">
                 <input class="button" type="submit" name="ride" value="Let's Ride!"/>
                 </form>
