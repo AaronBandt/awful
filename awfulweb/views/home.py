@@ -45,6 +45,8 @@ def view_home(request):
     places_response = []
     awfulites = []
 
+#    request.response.set_cookie('lat',value='12345',max_age=604800,path='/')
+
     params = {'home_lat': None,
               'home_lon': None,
               'radius': request.registry.settings['awful.default_radius'],
