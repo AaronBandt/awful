@@ -24,13 +24,13 @@ def view_ratings(request):
     rated = None
     unrated = None
     no_unrated = False
+    current_lat = None
+    current_lon = None
 
     params = {'sort_type': 'a',
               'sort_order': 'asc',
               'show': 'unrated',
               'start': 0,
-              'home_lat': None,
-              'home_lon': None,
               'radius': request.registry.settings['awful.default_radius'],
              }
     for p in params:
@@ -43,8 +43,11 @@ def view_ratings(request):
     sort_order = params['sort_order']
     show = params['show']
     offset = int(params['start'])
-    home_lat = params['home_lat']
-    home_lon = params['home_lon']
+    try:
+        current_lat = request.cookies['current_lat']
+        current_lon = request.cookies['current_lon']
+    except:
+        pass
     radius = params['radius']
 
     if 'rating.submitted' in request.POST:
@@ -73,7 +76,7 @@ def view_ratings(request):
             return Response(str(conn_err_msg), content_type='text/plain', status_int=500)
 
     # FIXME: this is ugly
-    geo_places = get_nearby(request)
+    geo_places = get_nearby(current_lat = current_lat, current_lon = current_lon, radius = radius)
     geo_place_ids = []
     for g in geo_places:
         geo_place_ids.append(g.cs_id)
@@ -114,9 +117,6 @@ def view_ratings(request):
         conn_err_msg = e
         return Response(str(conn_err_msg), content_type='text/plain', status_int=500)
 
-    if not home_lat:
-        page_title = 'Tracking your AWFUL position.'
-
     return {'layout': site_layout(),
             'page_title': page_title,
             'au': au,
@@ -129,7 +129,7 @@ def view_ratings(request):
             'rated': rated,
             'unrated': unrated,
             'no_unrated': no_unrated,
-            'home_lat': home_lat,
-            'home_lon': home_lon,
+            'current_lat': current_lat,
+            'current_lon': current_lon,
             'radius': radius,
            }

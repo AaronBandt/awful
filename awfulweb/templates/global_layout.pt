@@ -10,6 +10,68 @@
         href="/static/favico.png?v=1">
     <title>AWFUL: ${page_title}</title>
     <link href="/static/awful.css" rel="stylesheet" type="text/css" />
+
+    <script src="/static/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+
+          function overlay() {
+            var over = '<div id="overlay">' +
+                '<img id="loading" src="/static/loading.gif">' +
+                '</div>';
+            $(over).appendTo('body');
+          }
+          function removeOverlay() {
+            $('#overlay').remove();
+          }
+
+          function foundLocation(position)
+          {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+            setCookie("current_lat", lat);
+            setCookie("current_lon", lon);
+            removeOverlay();
+          }
+          function noLocation()
+          {
+            alert('Could not determine your location');
+          }
+
+          // Session cookie
+          function setCookie(cname, cvalue) {
+              document.cookie = cname + "=" + cvalue + ";";
+          }
+
+          function getCookie(cname) {
+              var name = cname + "=";
+              var ca = document.cookie.split(';');
+              for(var i=0; i<ca.length; i++) {
+                  var c = ca[i];
+                  while (c.charAt(0)==' ') c = c.substring(1);
+                  if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+              }
+              return "";
+          }
+
+          function checkCookie() {
+              var lon = getCookie("current_lon");
+              if (lon == "") {
+                overlay();
+                navigator.geolocation.getCurrentPosition(foundLocation, noLocation);
+              }
+              else
+              {
+                var lat = getCookie("current_lat");
+                updateForm('locate', lat, lon);
+              }
+          }
+
+          // Insert the lat/lon cookies if they're empty
+          checkCookie();
+      });
+    </script>
+
   </head>
   <body>
 
@@ -24,16 +86,16 @@
         </div>
         <div class="nav_bar">
             <span>
-              <a class="nav" href="/?home_lat=${home_lat}&home_lon=${home_lon}&radius=${radius}">HOME</a>
+              <a class="nav" href="/">HOME</a>
             </span>
             <span>
-              <a class="nav" href="/ratings?home_lat=${home_lat}&home_lon=${home_lon}&radius=${radius}">RATINGS</a>
+              <a class="nav" href="/ratings">RATINGS</a>
             </span>
             <span>
-              <a class="nav" href="/places?home_lat=${home_lat}&home_lon=${home_lon}&radius=${radius}">PLACES</a>
+              <a class="nav" href="/places">PLACES</a>
             </span>
             <span>
-              <a class="nav" href="/help?home_lat=${home_lat}&home_lon=${home_lon}&radius=${radius}">HELP</a>
+              <a class="nav" href="/help">HELP</a>
             </span>
             <span class="nav right">
               <ul class="user">

@@ -689,3 +689,22 @@ ul.gen_res {
     list-style:none;
     padding-left:0;
 }
+
+/* loading overlay */
+#overlay {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+}
+#loading {
+    width: 16px;
+    height: 11px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -28px 0 0 -25px;
+}
+

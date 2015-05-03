@@ -4,48 +4,7 @@
     <script src="/static/jquery-2.1.3.min.js"></script>
     <script src="/static/jquery.barrating.min.js"></script>
 
-    <div tal:condition="not home_lat" class="body_shell">
-      <script>
-        // Ask for lat/lon and if we get it, insert it into the form.
-        $(function() {
-
-          // Disable the submit button until we're ready. Need it in
-          // case user does regular page reload instead of shift +
-          navigator.geolocation.getCurrentPosition(foundLocation, noLocation);
-
-          function addHidden(theForm, key, value) {
-              // Create a hidden input element, and append it to the form:
-              var input = document.createElement('input');
-              input.type = 'hidden';
-              input.name = key;
-              input.value = value;
-              theForm.appendChild(input);
-          }
-
-          var theForm1 = document.forms['locate'];
-
-          function foundLocation(position)
-          {
-            var lat = position.coords.latitude;
-            var long = position.coords.longitude;
-            addHidden(theForm1, 'home_lat', lat);
-            addHidden(theForm1, 'home_lon', long);
-            addHidden(theForm1, 'radius', '2');
-            $("#locate").submit();
-          }
-          function noLocation()
-          {
-            alert('Could not find location');
-          }
-        });
-      </script>
-
-        <form name="locate" id="locate" action="/ratings" method="GET">
-        </form>
-
-    </div>
-
-    <div tal:condition="home_lat" class="body_shell">
+    <div class="body_shell">
 
       <div id="pag_container">
         <div tal:attributes="class 'pag_buttons disable' if offset == 0 else 'pag_buttons'">

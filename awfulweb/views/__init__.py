@@ -58,43 +58,14 @@ def _cs_api_query(req):
         return None
 
 
-def get_nearby(request, **kwargs):
+def get_nearby(**kwargs):
 
     geo_places_ids = []
     # lat/lon/radius passed in
-    if 'home_lat' in kwargs.keys():
-        home_lat = float(kwargs['home_lat'])
-        home_lon = float(kwargs['home_lon'])
-        radius = float(kwargs['radius'])
-        log.info("get_nearby got lat: %s lon: %s radius: %s from passed parameter" % (home_lat,home_lon,radius))
-    else:
-        # get these settings from the request or fallback to config defaults
-        try:
-            try:
-                home_lat = float(request.GET['home_lat'])
-                home_lon = float(request.GET['home_lon'])
-                log.info("get_nearby got lat: %s lon: %s from browser GET" % (home_lat,home_lon))
-            except:
-                home_lat = float(request.POST['home_lat'])
-                home_lon = float(request.POST['home_lon'])
-                log.info("get_nearby got lat: %s lon: %s from browser POST" % (home_lat,home_lon))
-        except:
-            home_lat = float(request.registry.settings['awful.default_lat'])
-            home_lon = float(request.registry.settings['awful.default_lon'])
-            log.info("get_nearby using default lat: %s lon: %s" % (home_lat,home_lon))
-            pass
-
-        try:
-            try:
-                radius = float(request.GET['radius'])
-                log.info("get_nearby got radius: %s from browser GET" % (radius))
-            except:
-                radius = float(request.POST['radius'])
-                log.info("get_nearby got radius: %s from browser POST" % (radius))
-        except:
-            radius = float(request.registry.settings['awful.default_radius'])
-            log.info("get_nearby using default radius: %s" % (radius))
-            pass
+    current_lat = float(kwargs['current_lat'])
+    current_lon = float(kwargs['current_lon'])
+    radius = float(kwargs['radius'])
+    log.info("get_nearby got lat: %s lon: %s radius: %s from passed parameter" % (current_lat,current_lon,radius))
 
     # Find everything that's close
     query = """
@@ -108,7 +79,7 @@ def get_nearby(request, **kwargs):
                            sin( radians( lat ) ) ) )
             AS distance
             FROM places HAVING distance < %(dist)f
-            """ % {'lat': home_lat, 'lon': home_lon, 'dist': radius}
+            """ % {'lat': current_lat, 'lon': current_lon, 'dist': radius}
     near_results = DBSession.query('cs_id').from_statement(query).all()
     # FIXME: one day I will understand why this is giving me a keyed tuple
     for r in near_results:

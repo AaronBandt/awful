@@ -42,13 +42,14 @@ def view_home(request):
     has_reviews = False
     display = False
     results = False
+    current_lat = None
+    current_lon = None
     places_response = []
     awfulites = []
 
 #    request.response.set_cookie('lat',value='12345',max_age=604800,path='/')
 
-    params = {'home_lat': None,
-              'home_lon': None,
+    params = {
               'radius': request.registry.settings['awful.default_radius'],
              }
     for p in params:
@@ -57,8 +58,13 @@ def view_home(request):
         except:
             pass
 
-    home_lat = params['home_lat']
-    home_lon = params['home_lon']
+    print request.cookies
+
+    try:
+        current_lat = request.cookies['current_lat']
+        current_lon = request.cookies['current_lon']
+    except:
+        pass
     radius = params['radius']
 
     try:
@@ -94,7 +100,7 @@ def view_home(request):
                 return Response(str(conn_err_msg), content_type='text/plain', status_int=500)
 
         try:
-            places = get_nearby(request)
+            places = get_nearby(current_lat = current_lat, current_lon = current_lon, radius = radius)
 
             # Check the places and remove ones that have a last visit date
             # less than the threshold
@@ -176,9 +182,6 @@ def view_home(request):
     q = DBSession.query(User).filter(~(User.user_name==au['login']))
     all_users = q.all()
     
-    if not home_lat:
-        page_title = 'Tracking your AWFUL position.'
-
     return {'layout': site_layout(),
             'page_title': page_title,
             'au': au,
@@ -188,8 +191,8 @@ def view_home(request):
             'results': results,
             'places_response': places_response,
             'awfulites': awfulites,
-            'home_lat': home_lat,
-            'home_lon': home_lon,
+            'current_lat': current_lat,
+            'current_lon': current_lon,
             'radius': radius,
            }
 

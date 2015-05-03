@@ -28,11 +28,12 @@ def view_places(request):
     result_count = None
     search = False
     search_results = []
+    current_lat = None
+    current_lon = None
     cs_pub_code = request.registry.settings['awful.cs_pub_code']
 
-    params = {'home_lat': None,
-              'home_lon': None,
-              'radius': None,
+    params = {
+              'radius': request.registry.settings['awful.default_radius'],
              }
     for p in params:
         try:
@@ -40,34 +41,17 @@ def view_places(request):
         except:
             pass
 
-    home_lat = params['home_lat']
-    home_lon = params['home_lon']
+    try:
+        current_lat = request.cookies['current_lat']
+        current_lon = request.cookies['current_lon']
+    except:
+        pass
     radius = params['radius']
 
     if 'place_search.submitted' in request.POST:
         name = request.POST['name']
 
-        # get these settings from the form or fallback to config defaults
-        # FIXME: should be able to move this to the main function with some creativity
-        try:
-            home_lat = request.POST['home_lat']
-            home_lon = request.POST['home_lon']
-            log.info("View got lat: %s lon: %s from browser" % (home_lat,home_lon))
-        except:
-            home_lat = request.registry.settings['awful.default_lat']
-            home_lon = request.registry.settings['awful.default_lon']
-            log.info("View using default lat: %s lon: %s" % (home_lat,home_lon))
-            pass
-
-        try:
-            radius = request.POST['radius']
-            log.info("View got radius: %s from browser" % (radius))
-        except:
-            radius = request.registry.settings['awful.default_radius']
-            log.info("View using default radius: %s" % (radius))
-            pass
-
-        s = {'what': name, 'lat': home_lat, 'lon': home_lon, 'radius': radius}
+        s = {'what': name, 'lat': current_lat, 'lon': current_lon, 'radius': radius}
         api_endpoint = '/content/places/v2/search/latlon?type=restaurant&format=json&publisher=' + cs_pub_code
         req = api_endpoint + '&' + urllib.urlencode(s)
         resp = _cs_api_query(req)
@@ -105,14 +89,14 @@ def view_places(request):
     if 'place_select.submitted' in request.POST:
         name = request.POST['name']
         cs_id = request.POST['cs_id']
-        home_lat = request.POST['home_lat']
-        home_lon = request.POST['home_lon']
+        lat = request.POST['lat']
+        lon = request.POST['lon']
 
         log.info("Name: %s cs_id: %s User: %s" % (name, cs_id, au['login']))
         # Add it to the db
         try:
             utcnow = datetime.utcnow()
-            create = Place(name=name, cs_id=cs_id, lat=home_lat, lon=home_lon, updated_by=au['login'], created=utcnow, updated=utcnow)
+            create = Place(name=name, cs_id=cs_id, lat=lat, lon=lon, updated_by=au['login'], created=utcnow, updated=utcnow)
             DBSession.add(create)
             DBSession.flush()
         except Exception, e:
@@ -120,13 +104,10 @@ def view_places(request):
             return Response(str(conn_err_msg), content_type='text/plain', status_int=500)
 
     try:
-        places = get_nearby(request)
+        places = get_nearby(current_lat = current_lat, current_lon = current_lon, radius = radius)
     except Exception, e:
         conn_err_msg = e
         return Response(str(conn_err_msg), content_type='text/plain', status_int=500)
-
-    if not home_lat:
-        page_title = 'Tracking your AWFUL position.'
 
     return {'layout': site_layout(),
             'page_title': page_title,
@@ -136,8 +117,8 @@ def view_places(request):
             'search': search,
             'search_results': search_results,
             'cs_pub_code': cs_pub_code,
-            'home_lat': home_lat,
-            'home_lon': home_lon,
+            'current_lat': current_lat,
+            'current_lon': current_lon,
             'radius': radius,
            }
 
