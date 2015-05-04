@@ -58,7 +58,7 @@ def view_home(request):
         except:
             pass
 
-    print request.cookies
+#    print request.cookies
 
     try:
         current_lat = request.cookies['current_lat']
