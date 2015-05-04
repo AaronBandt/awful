@@ -99,14 +99,18 @@ def view_home(request):
                 conn_err_msg = e
                 return Response(str(conn_err_msg), content_type='text/plain', status_int=500)
 
+        print "Awfulite IDS: ", awfulite_ids
+
         try:
             places = get_nearby(current_lat = current_lat, current_lon = current_lon, radius = radius)
 
             # Check the places and remove ones that have a last visit date
             # less than the threshold
             for p in places:
+                log.info('PRE SCRUB PLACE: %s' % (p.name))
                 for v in p.last_visit:
                     if v.user_id in awfulite_ids:
+                        log.info('Found user ID: %s in awfulite IDs' % (v.user_id))
                         utc_server_now = arrow.utcnow().naive
                         if not v.date < utc_server_now - timedelta(days=visit_threshold):
                             log.info('REMOVING from results: %s' % (p.name))
@@ -119,7 +123,7 @@ def view_home(request):
             # Find all the ratings by the included AWFULites
             for p in places:
                 ratings = {}
-                log.debug('PLACE: %s' % (p.name))
+                log.info('POST SCRUB PLACE: %s' % (p.name))
                 for r in p.ratings:
                     pa = None
                     if r.updated_by in awfulites:
@@ -137,6 +141,11 @@ def view_home(request):
     
             # Sort by rating
             places_response.sort(key=lambda x: x.avg, reverse=True)
+            final = []
+            for r in places_response:
+                final.append(r.name)
+               
+            log.info('FINAL PLACEs: %s' % (final))
 
         except Exception, e:
             conn_err_msg = e
