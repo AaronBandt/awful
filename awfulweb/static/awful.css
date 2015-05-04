@@ -700,10 +700,13 @@ ul.gen_res {
     background: rgba(0,0,0,0.5);
 }
 #loading_c {
+  position: relative;
+  top: 50%;
 }
 #loading_h {
   display: table;
   margin: 0 auto;
+  color: #fff;
 }
 #loading_i {
   width: 16px;
