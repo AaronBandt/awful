@@ -104,22 +104,28 @@ def view_home(request):
         try:
             places = get_nearby(current_lat = current_lat, current_lon = current_lon, radius = radius)
 
+            log.info('ALL places objects: %s' % (places))
+
             # Check the places and remove ones that have a last visit date
             # less than the threshold
-            for p in places:
-                log.info('PRE SCRUB PLACE: %s' % (p.name))
+            for p in list(places):
+                log.debug('PRE SCRUB PLACE: %s' % (p.name))
+                log.debug('Last visits are: %s' % (p.last_visit))
                 for v in p.last_visit:
+                    log.debug('LAST VISIT ID: %s PLACE_ID: %s USER_ID: %s DATE: %s' % (v.last_visit_id, v.place_id, v.user_id, v.date))
                     if v.user_id in awfulite_ids:
-                        log.info('Found user ID: %s in awfulite IDs' % (v.user_id))
+                        log.debug('Found user ID: %s in awfulite IDs' % (v.user_id))
                         utc_server_now = arrow.utcnow().naive
                         if not v.date < utc_server_now - timedelta(days=visit_threshold):
-                            log.info('REMOVING from results: %s' % (p.name))
                             # FIXME: need something better than just catching the exception
                             try:
+                                log.debug('REMOVING from results: %s' % (p.name))
+                                log.debug('REMOVING object: %s' % (p))
                                 places.remove(p)
+                                break
                             except:
-                                pass
-    
+                                raise
+
             # Find all the ratings by the included AWFULites
             for p in places:
                 ratings = {}
