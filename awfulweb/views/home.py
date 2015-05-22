@@ -2,6 +2,7 @@ from pyramid.view import view_config
 from pyramid.response import Response
 from datetime import datetime
 from datetime import timedelta
+from collections import OrderedDict
 import arrow
 from awfulweb.views import (
     get_authenticated_user,
@@ -34,11 +35,36 @@ def _place_response(name, place_id, avg, pa):
     return response
 
 
+def adjust_ratings(last_visits, awfulite_ids, avg):
+
+    print "Avg type: ", type(avg)
+
+    for v in last_visits:
+        log.debug('LAST VISIT ID: %s PLACE_ID: %s USER_ID: %s DATE: %s' % (v.last_visit_id, v.place_id, v.user_id, v.date))
+        if v.user_id in awfulite_ids:
+            log.debug('Found user ID: %s in awfulite IDs' % (v.user_id))
+            utc_server_now = arrow.utcnow().naive
+            # Days/multiplier to reduce the score by
+            mod = OrderedDict([('5', '.2'), ('7', '.4'), ('9', '.6'), ('11', '.8')])
+            for lv_days,mult in mod.iteritems():
+                lv_days = int(lv_days)
+                mult = float(mult)
+                log.info('Days: {0} Divider: {1}'.format(lv_days,mult))
+                td = timedelta(days=lv_days)
+                log.info('Time delta is: %s' % (td))
+                if not v.date < utc_server_now - td:
+                    log.info('Making adjustment')
+                    avg = float("{0:.2f}".format(avg*mult))
+                    log.info('POST Adjusted Average: %s' % (avg))
+                    return avg
+    return avg
+
+
 @view_config(route_name='home', permission='view', renderer='awfulweb:templates/home.pt')
 def view_home(request):
     page_title = 'Become AWFUL.'
     au = get_authenticated_user(request)
-    visit_threshold = int(request.registry.settings['awful.visit_threshold'])
+#    visit_threshold = int(request.registry.settings['awful.visit_threshold'])
     has_reviews = False
     display = False
     results = False
@@ -46,8 +72,6 @@ def view_home(request):
     current_lon = None
     places_response = []
     awfulites = []
-
-#    request.response.set_cookie('lat',value='12345',max_age=604800,path='/')
 
     params = {
               'radius': request.registry.settings['awful.default_radius'],
@@ -57,8 +81,6 @@ def view_home(request):
             params[p] = request.params[p]
         except:
             pass
-
-#    print request.cookies
 
     try:
         current_lat = request.cookies['current_lat']
@@ -108,28 +130,29 @@ def view_home(request):
 
             # Check the places and remove ones that have a last visit date
             # less than the threshold
-            for p in list(places):
-                log.debug('PRE SCRUB PLACE: %s' % (p.name))
-                log.debug('Last visits are: %s' % (p.last_visit))
-                for v in p.last_visit:
-                    log.debug('LAST VISIT ID: %s PLACE_ID: %s USER_ID: %s DATE: %s' % (v.last_visit_id, v.place_id, v.user_id, v.date))
-                    if v.user_id in awfulite_ids:
-                        log.debug('Found user ID: %s in awfulite IDs' % (v.user_id))
-                        utc_server_now = arrow.utcnow().naive
-                        if not v.date < utc_server_now - timedelta(days=visit_threshold):
-                            # FIXME: need something better than just catching the exception
-                            try:
-                                log.debug('REMOVING from results: %s' % (p.name))
-                                log.debug('REMOVING object: %s' % (p))
-                                places.remove(p)
-                                break
-                            except:
-                                raise
+#            for p in list(places):
+#                log.info('PRE SCRUB PLACE: %s' % (p.name))
+#                log.info('Last visits are: %s' % (p.last_visit))
+#                for v in p.last_visit:
+#                    log.info('LAST VISIT ID: %s PLACE_ID: %s USER_ID: %s DATE: %s' % (v.last_visit_id, v.place_id, v.user_id, v.date))
+#                    if v.user_id in awfulite_ids:
+#                        log.info('Found user ID: %s in awfulite IDs' % (v.user_id))
+#                        utc_server_now = arrow.utcnow().naive
+#                        log.info('TIME is: %s' % (utc_server_now - timedelta(days=visit_threshold)))
+#                        if not v.date < utc_server_now - timedelta(days=visit_threshold):
+#                            # FIXME: need something better than just catching the exception
+#                            try:
+#                                log.info('REMOVING from results: %s' % (p.name))
+#                                log.info('REMOVING object: %s' % (p))
+#                                places.remove(p)
+#                                break
+#                            except:
+#                                raise
 
             # Find all the ratings by the included AWFULites
             for p in places:
                 ratings = {}
-                log.info('POST SCRUB PLACE: %s' % (p.name))
+                log.info('Working on place: %s' % (p.name))
                 for r in p.ratings:
                     pa = None
                     if r.updated_by in awfulites:
@@ -138,7 +161,10 @@ def view_home(request):
     
                 if ratings:
                     avg = float("{0:.2f}".format(sum(ratings.values())/float(len(ratings))))
-                    log.debug('Average: %s' % (avg))
+                    log.info('PRE Adjusted Average: %s' % (avg))
+
+                    avg = adjust_ratings(p.last_visit, awfulite_ids, avg)
+
                     if len(ratings) > 1:
                         pa = min(ratings, key=ratings.get)
                         log.debug('Biggest pain in the ass: %s' %(pa))

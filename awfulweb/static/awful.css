@@ -79,6 +79,26 @@ tr th:last-child {
     border-bottom-right-radius:3px;
 }
 
+/* END css arrows */
+.arrow-right {
+    width: 0; 
+    height: 0; 
+    border-top: 20px solid transparent;
+    border-bottom: 20px solid transparent;
+    
+    border-left: 20px solid green;
+}
+
+.arrow-left {
+    width: 0; 
+    height: 0; 
+    border-top: 20px solid transparent;
+    border-bottom: 20px solid transparent; 
+    
+    border-right:20px solid blue; 
+}
+/* END css arrows */
+
 #login,
 #logout,
 #signup,
@@ -320,15 +340,22 @@ input[type=checkbox] {
 
 input.button {
     width: 100px;
-    height: 20px;
+    height: 25px;
     border-radius: 5px;
-    border: 1p solid #999;
+    border: none;
     margin-left: auto ;
     margin-right: auto ;
+    color: #fff;
+    background: #4C494C;
+    cursor: pointer;
 }
 
 input.button:hover {
-    background: #e3ddd6;
+    background: #927E74;
+}
+
+input.button:active {
+    background: #E3DDD6;
 }
 
 .row {
