@@ -21,7 +21,7 @@
               </li>
               <li>
                 <input tal:attributes="value au['last']" type="text" id="last_name" name="last_name" placeholder="Last Name" />
-                <span class="form_hint">First name</span>
+                <span class="form_hint">Last name</span>
               </li>
               <li>
                 <input type="password" id="password" name="password" placeholder="change your password"/>
